@@ -26,21 +26,3 @@ function add(a,b,c,d){
 console.log(curry(add,1,2,3,4));//输出 10
 console.log(curry(add,1,2,3)(4));//输出 10
 
-
-
-// compose函数: 就是将几个有特点的函数拼凑在一起, 让它们结合， 产生一个崭新的函数: const compose = (f,g) => (...arg) => f(g(...arg))
-function compose() {
-    var fns = [...arguments]
-    return function (initialArg) {
-        var res = initialArg
-        for (var i = fns.length - 1; i > -1; i--) {
-            res = fns[i](res)
-        }
-        return res
-    }
-}
-
-let toUpperCase = (x) => x.toUpperCase()
-let exclaim = (x) => x + '!';
-compose(toUpperCase,exclaim)('hello world')
-
