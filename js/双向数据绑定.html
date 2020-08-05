@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input id='myinput'/>
+    <div id='myId'></div>
+
+    <input id='myinput2'/>
+    <div id='myId2'></div>
+    <script>
+        // Object.defineProperty实现双向绑定
+        let myInput = document.querySelector('#myinput')
+        let myId = document.querySelector('#myId')
+        let obj = {}
+        Object.defineProperty(obj,'hello',{
+            set:function(value){
+                myInput.value = value
+                myId.innerHTML = value
+            }
+        })
+        myInput.addEventListener('change',function(e){
+            obj['hello'] = e.target.value
+            
+        })
+
+        // new Proxy实现双向绑定
+        let myInput2 = document.querySelector('#myinput2')
+        let myId2 = document.querySelector('#myId2')
+        let obj2 = {}
+        let targetP = new Proxy(obj2,{
+            set:function(target,key,value){
+                myInput2.value = value
+                myId2.innerHTML = value
+            }
+        })
+        myInput2.addEventListener('change',function(e){
+            targetP.hello = e.target.value
+            
+        })
+    </script>
+</body>
+</html>

@@ -27,8 +27,9 @@ function nodeEvent(){
     return this
 }
 
-var events=new Events()
+var events=new  EventLister()
 events.on('say',function(name){
     console.log('Hello',name)
 })
 events.emit('say','Jony yu')
+

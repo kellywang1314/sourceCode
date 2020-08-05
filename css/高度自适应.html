@@ -26,4 +26,26 @@
         <img src="https://dimg04.c-ctrip.com/images/300v1b000001ah1uw5387_C_210_210.jpg" />
     </div>
 </body>
+<script>
+    // 深拷贝
+
+    function deepclone(obj,hash= new Map()){
+        if(typeof obj != 'object') return obj
+        if(hash.has(obj)) return hash.get(obj)
+        let newobj = Array.isArray(obj) ? [] :{}
+        hash.set(obj,newobj)
+        for(let i in obj){
+            if(typeof obj[i] === 'object'){
+                newobj[i] = deepclone(obj[i],hash)
+            }else{
+                newobj[i] = obj[i]
+            }
+        }
+        return newobj
+
+    }
+
+    
+    
+</script>
 </html>
