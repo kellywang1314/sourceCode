@@ -123,4 +123,77 @@ function promiseAll(arr){
 }
 
 
+/* 2020年8月6日*/
+
+// 深拷贝
+function deepCopy(obj,hash=new WeakMap()){
+    if((!obj instanceof Object)) return obj
+    if(hash.has(obj)) return hash.get(obj)
+    let newObj = obj instanceof Array ? [] : {}
+    hash.set(obj,newObj)
+    for(let item in obj){
+        if(obj[item] instanceof Object){
+            newObj[item] = deepCopy(obj[item],hash)
+        }else{
+            newObj[item] = obj[item]
+        }
+    }
+    return newObj
+
+}
+let a = {
+    a1:[1,2,3],
+    a2:{
+        a3:{a4:'1'}
+    }
+}
+let c = {
+    a1:[1,2,3],
+    a2:{
+        a3:{a4:'1'},
+        a4:a
+    }
+}
+let b = deepCopy(c)
+
+
+// 防抖
+function debunce(fn){
+    let timer = null
+    return function(){
+        let args = [...arguments]
+        let that = this
+        if(timer){
+            clearTimeout(timer)
+        }else{
+            timer = setTimeout(() => {
+                fn.apply(that,args)
+            },timeout)
+        }
+    }
+}
+
+
+// 节流
+function tottle(fn,timeout){
+    let timer = null
+    return function(){
+        let args = [...arguments]
+        let that = this
+        if(!timer){
+            timer = setTimeout(() => {
+                fn.apply(that,args)
+                timer = null
+            },timeout)
+        }
+    }
+}
+
+
+function fn(a){
+    console.log(a)
+}
+
+window.addEventListener('resize',this.tottle(function(){fn(1)},1000))
+
 
