@@ -197,3 +197,32 @@ function fn(a){
 window.addEventListener('resize',this.tottle(function(){fn(1)},1000))
 
 
+/* 2020年8月7日*/
+
+// 复习promise的实现
+
+function myPromise(fn){
+    this.callBack = []
+    function resolve(value){
+        setTimeout(() => {
+            this.data = value
+            this.callBack.forEach(item => item(value))
+        },0)
+    }
+    fn(resolve)
+}
+
+myPromise.prototype.then = function(onfullied){
+    return new myPromise(resolve => {
+        this.callBack.push(() => {
+            let res = onfullied(this.data)
+            if(res instanceof myPromise){
+                res.then(resolve)
+            }else{
+                resolve(res)
+            }
+        })
+        
+    })  
+}
+
