@@ -1,4 +1,4 @@
-// 每次选择最小的放到前面
+// 选择排序 O(n^2) 不稳定
 function selectSort(arr){
     let len = arr.length
     for(let i=0; i<len; i++){
