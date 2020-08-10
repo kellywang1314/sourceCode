@@ -226,3 +226,39 @@ myPromise.prototype.then = function(onfullied){
     })  
 }
 
+
+/* 2020年8月10日*/
+
+// instanceof
+function instanceOf(left,right){
+    left = left.__proto__
+    right = right.prototype
+    while(left){
+        if(left == right){
+            return true
+        }else{
+            left = left.__proto__
+        }
+    }
+    return false
+}
+
+// 请在此处完善代码，不能直接使用 new 操作符
+function myNew(constructor, ...rest) {
+   let obj = {}
+   obj.__proto__ = constructor.prototype
+   let res = constructor.apply(obj,rest)
+   return res instanceof Object ? res : obj
+}
+// 测试代码
+function Fun(name,sex) {
+    this.name = name
+    this.sex = sex
+  }
+  Fun.prototype.getUserInfo = function() {
+    return `我的姓名${this.name},我的性别${this.sex}`
+  }
+  
+  const fun = myNew(Fun,'子君','男')
+  console.log(fun.getUserInfo())
+  
