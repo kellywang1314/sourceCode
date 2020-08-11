@@ -265,7 +265,8 @@ function Fun(name,sex) {
   console.log(fun.getUserInfo())
 
 
-  // 额外的一道题目
+/* 2020年8月11日 */
+
   /* 
     如下为一段代码，请完善sum函数，使得 sum(1,2,3,4,5,6) 函数返回值为 21 ,
     需要在 sum 函数中调用 asyncAdd 函数，且不能修改asyncAdd函数
@@ -288,7 +289,6 @@ function asyncAdd(a,b,callback) {
    * @param  {...any} rest 传入的参数
    */
   async function sum(...rest) {
-    // 请在此处完善代码
     let result = rest.shift()
     for(let num of rest){
         result = await new Promise(resolve => {
@@ -297,8 +297,32 @@ function asyncAdd(a,b,callback) {
             })
         })
     }
-    return result
+    return result 
+
   }
+
+// promise all
+  async function sum(...rest) {
+    let result = 0
+    const obj = {}
+    obj.toString = function(){
+        return result
+    }
+    const promises = []
+    for(let num of rest){
+        promiseAll.push(new Promise(resolve => {
+            asyncAdd(result,num,(_,res) => {
+                resolve(res)
+            })
+        }).then(res => {
+            result = res
+        })
+        )
+    }
+    await Promise.all(promises)
+
+  }
+  
   
   let start = window.performance.now()
   sum(1, 2, 3, 4, 5, 6).then(res => {
