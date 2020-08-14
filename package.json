@@ -1,0 +1,32 @@
+{
+  "name": "sourcecode",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --config ./webpack/webpack.config.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kellywang1314/sourceCode.git"
+  },
+  "author": "ynan_wang",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kellywang1314/sourceCode/issues"
+  },
+  "homepage": "https://github.com/kellywang1314/sourceCode#readme",
+  "dependencies": {
+    "@babel/core": "^7.11.1",
+    "@babel/parser": "^7.11.3",
+    "@babel/traverse": "^7.11.0",
+    "babel": "^6.23.0",
+    "clean-webpack-plugin": "^3.0.0",
+    "path": "^0.12.7",
+    "webpack": "^4.44.1"
+  },
+  "devDependencies": {
+    "webpack-cli": "^3.3.12"
+  }
+}
