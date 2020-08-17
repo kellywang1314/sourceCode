@@ -377,3 +377,21 @@ function render(domNode){
     return $el
 }
   
+
+/* 2020年8月17日练习 */
+// 数据绑定
+<input type='text' id='in'/>
+<div id='d'></div>
+let $input = document.getElementById('in')
+let $div = document.getElementById('d')
+
+let targetD = new Proxy({},{
+    set:function(target,key,value){
+        // target[key] = value
+        $input.value = value
+        $div.innerHTML = value
+    }
+})
+$input.onchange = function(e){
+    targetD['hello'] = e.target.value
+}
