@@ -395,3 +395,25 @@ let targetD = new Proxy({},{
 $input.onchange = function(e){
     targetD['hello'] = e.target.value
 }
+
+/* 2020年9月1日练习 */
+
+// promiseAll的实现
+function promiseAll(promises){
+    let count = 0
+    let len = promises.length
+    let result = []
+    return new Promise((resolve,reject) => {
+        for(let i in promises){
+           promise.resolve(promises[i]).then((res)=>{
+                count++
+                result[count] = res
+                if(count === len){
+                    return resolve(result)
+                }
+           },(error) => {
+                return reject(error)
+           })
+        }
+    })
+}
