@@ -417,3 +417,49 @@ function promiseAll(promises){
         }
     })
 }
+
+
+/* 2020年9月3日练习 */
+// promiseAll的实现
+function promiseAll(promises){
+    let results = []
+    let count = 0
+    return new Promise((resolve,reject) => {
+        for(let i of promises){
+            Promise.resolve(i).then((res) => {
+                count++
+                results[count] = res
+                if(count === promises.length){
+                    return resolve(results)
+                }
+            },(err) => {
+                return reject(err)
+            })
+        }
+    })
+}
+
+// promsie的实现
+function mypromise(fn){
+    this.callbacks = []
+    function resolve(value){
+        setTimeout(() =>{
+            this.data = value
+            this.callbacks.map(item => item && item())
+        })
+    }
+    fn(resolve)
+}
+
+mypromise.prototype.then = function(onResolved){
+    return new mypromise((resolve) => {
+        this.callbacks.push(() => {
+            let temp = onResolved(this.data)
+            if(temp instanceof mypromise){
+                temp.then(resolve)
+            }else{
+                resolve(temp)
+            }
+        })
+    })
+}
