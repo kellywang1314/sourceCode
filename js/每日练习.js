@@ -463,3 +463,20 @@ mypromise.prototype.then = function(onResolved){
         })
     })
 }
+
+
+/* 2020年9月4日练习 */
+// compose函数: 就是将几个有特点的函数拼凑在一起,让它们结合,产生一个崭新的函数: const compose = (f,g) => (...arg) => f(g(...arg))
+function compose(){
+    let args = [...arguments]
+    return function(params){
+        for(var i = args.length - 1; i > -1; i--){
+            params = args[i] (params)
+        }
+        return params
+    }
+}
+
+let toUpperCase = (x) => x.toUpperCase()
+let exclaim = (x) => x + '!';
+compose(toUpperCase,exclaim)('hello world')
