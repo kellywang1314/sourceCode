@@ -5,20 +5,23 @@
 */
 function curry(fn){
     let len = fn.length
-    let resArg = [...arguments].slice(1)
+    let args = [...arguments].slice(1)
     let that = this
-    if(len === resArg.length){
-        return fn.apply(that,resArg)
-    }else{
-        return function(){
-            resArg = [...resArg,...arguments]
-            if(len=== resArg.length){
-                return fn.apply(that,resArg)
-            }
+    if(args.length === len){
+        return fn.apply(that,args)
+    }
+    function _curry(){
+        let arg =  [...arguments]
+        args = [...args,...arg]
+        if(args.length === len ){
+            fn.apply(that,args)
+        }else{
+            return _curry
         }
     }
-}
-
+    return _curry
+        
+  }
 function add(a,b,c,d){
     let res = a+b+c+d
     return res

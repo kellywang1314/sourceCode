@@ -6,22 +6,16 @@
     <title>Document</title>
 </head>
 <body>
-<input type='text' id='in'/>
+<div class="file-box"> 
+    <form id="uploadForm"> 
+        <input type="file" name="file" class="file" id="fileField" onchange="document.getElementById('textfield').value=this.files[0].name"/> 
+        <input type="submit" class="btn" value="上传" /> 
+    </form> 
+ </div>
 <div id='d'></div>
 
 <script>
-let $input = document.getElementById('in')
-let $div = document.getElementById('d')
 
-let targetD = new Proxy({},{
-    set:function(target,key,value){
-        $input.value = value
-        $div.innerHTML = value
-    }
-})
-$input.onchange = function(e){
-    targetD['hello'] = e.target.value
-}
 </script>
 </body>
 </html>

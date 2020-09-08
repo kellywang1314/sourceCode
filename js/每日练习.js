@@ -522,3 +522,31 @@ let domNode = {
     }
     return dom
   }
+
+  /* 2020年9月8日练习 */
+  // 柯里化
+  function curry(fn){
+    let len = fn.length
+    let args = [...arguments].slice(1)
+    let that = this
+    if(args.length === len){
+        return fn.apply(that,args)
+    }
+    function _curry(){
+        let arg =  [...arguments]
+        args = [...args,...arg]
+        if(args.length === len ){
+            fn.apply(that,args)
+        }else{
+            return _curry
+        }
+    }
+    return _curry
+        
+  }
+
+  function add(a,b,c,d){
+    let res = a+b+c+d
+    return res
+}
+curry(add,1,2,3,4)
