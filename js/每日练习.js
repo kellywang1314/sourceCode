@@ -550,3 +550,46 @@ let domNode = {
     return res
 }
 curry(add,1,2,3,4)
+
+
+/* 2020年9月8日晚练习 */
+
+  let domNode = {
+    tagName: 'ul',
+    props: { class: 'list' },
+    children: [{
+      tagName: 'li',
+      children: ['item1']
+    }, {
+      tagName: 'li',
+      children: ['item1']
+    }]
+  };
+  
+  // 构建一个 render 函数，将 domNode 对象渲染为 以下 dom
+<ul class="list">
+      <li>item1</li>
+      <li>item2</li>
+  </ul>
+
+
+function render(domNode){
+    if(!domNode) return document.createDocumentFragment()
+    let dom
+    if(typeof domNode === 'object'){
+        dom = document.createElement(domNode.tagName)
+        if(domNode.props){
+            for(let i in domNode.props){
+                dom.setAttribute(i,domNode.props[i])
+            }
+        }
+        if(domNode.children.length){
+            for(let i in domNode.children){
+                dom.appendChild(render(domNode.children[i]))
+            }
+        }
+    }else{
+        dom = document.createTextNode(domNode)
+    }
+    return dom
+}
