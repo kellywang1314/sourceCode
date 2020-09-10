@@ -593,3 +593,43 @@ function render(domNode){
     }
     return dom
 }
+
+/* 2020年9月10日练习 */
+
+// 防抖
+function debounce(fn,timeout){
+    let timer = null 
+    return function(){
+        let that = this
+        let args = [...arguments]
+        if(timer){
+            clearTimeout(timer)
+        }
+        timer = setTimeout(() => {
+            fn.apply(that,args)
+        },timeout)
+            
+    }
+}
+
+// 节流
+function tottle(fn,timeout){
+    let timer = null
+    return function(){
+        let that = this
+        let args = [...arguments]
+        if(!timer){
+            timer = setTimeout(() => {
+                fn.apply(that,args)
+                timer = null
+            },timeout)
+        }   
+    }
+        
+}
+
+function d(value){
+    console.log(value)
+}
+
+window.addEventListener('resize',tottle(function(){d(1)},1000))
