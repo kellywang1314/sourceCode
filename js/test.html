@@ -12,10 +12,21 @@
         <input type="submit" class="btn" value="上传" /> 
     </form> 
  </div>
-<div id='d'></div>
-
+<input type='text' id='input'/>
+<div id='text'></div>
 <script>
-
+    let $input = document.querySelector('#input')
+    let $div = document.querySelector('#text')
+    let obj = {}
+    let proxyObject = new Proxy(obj,{
+        set(target,key,value){
+            $input.value = value
+            $div.innerHTML = value
+        }
+    })
+    $input.onchange=(e) => {
+        proxyObject['hello'] = e.target.value
+    }
 </script>
 </body>
 </html>
