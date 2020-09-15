@@ -678,3 +678,37 @@ let domNode = {
     }
     return $dom
   }
+
+/* 2020年9月14日晚练习 */
+// 快速排序 arr = [0,3,1,7,2,9,8,-1]
+function quickSort(arr = []){
+    if(arr.length <=1 ) return arr
+    let left = []
+    let right = []
+    let posValue = arr.splice(parseInt(arr.length/2),1)[0]  
+    for(let i in arr){
+        if(arr[i] < posValue){
+            left.push(arr[i])
+        }else{
+            right.push(arr[i])
+        }
+    }
+    return [...quickSort(left),posValue,...quickSort(right)]
+}
+
+// 插入排序
+function insertSort(arr=[]){
+    for(let i=0; i<arr.length-1; i++){
+        let index = i+1
+        let value = arr[i+1]
+        for(let j=i; j>=0;j--){
+            if(value < arr[j]){
+                index = j
+                arr[j+1] = arr[j]
+            }
+        }
+        arr[index] = value
+    }
+    return arr
+}
+    
