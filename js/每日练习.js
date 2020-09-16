@@ -680,7 +680,7 @@ let domNode = {
   }
 
 /* 2020年9月14日晚练习 */
-// 快速排序 arr = [0,3,1,7,2,9,8,-1]
+// 快速排序 arr = [0,3,1,7,2,9,8,-1] ,不稳定 nlogn
 function quickSort(arr = []){
     if(arr.length <=1 ) return arr
     let left = []
@@ -696,18 +696,36 @@ function quickSort(arr = []){
     return [...quickSort(left),posValue,...quickSort(right)]
 }
 
-// 插入排序
+// 插入排序, 稳定 n*n
 function insertSort(arr=[]){
-    for(let i=0; i<arr.length-1; i++){
-        let index = i+1
+    let len = arr.length
+    for(let i=0; i<len-1; i++){
+        let index= i+1
         let value = arr[i+1]
-        for(let j=i; j>=0;j--){
+        for(let j=i;j>=0;j--){
             if(value < arr[j]){
                 index = j
                 arr[j+1] = arr[j]
             }
         }
         arr[index] = value
+    }
+    return arr
+}
+
+// 选择排序, 不稳定 n*n
+function selectSort(arr=[]){
+    let len = arr.length
+    for(let i=0; i<len; i++){
+        let min = i
+        let minvalue = arr[i]
+        for(let j=i;j<len;j++){
+            if(arr[j]<minvalue){
+                min = j
+            }
+        }
+        arr[i] = arr[min]
+        arr[min] = minvalue
     }
     return arr
 }
