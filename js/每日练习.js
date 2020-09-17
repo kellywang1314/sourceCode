@@ -729,4 +729,33 @@ function selectSort(arr=[]){
     }
     return arr
 }
+
+// 数组按照其他数组排序
+let arr1 = ['a','b','c']
+let arr2 = [{code:'b'},{code:'c'},{code:'a'}]
+function followSort(arr1=[],arr2=[]){
+    return arr2.sort((a,b) =>{
+        return arr1.indexOf(a.code)-arr1.indexOf(b.code)
+    })
+}
+
+// 时间复杂度o(nlogn) 空间复杂度o(n) 稳定
+function mergeSort(arr=[]){
+    if(arr.lenght<2) return arr
+    let mid = Math.floor(arr.length/2)
+    let left = arr.slice(0,mid)
+    let right = arr.slice(mid,arr.length)
+    return merge(mergeSort(left),mergeSort(right))
+}
+function merge(left,right){
+    let result = [], l=0,r=0
+    while(l<left.length && r<right.length){
+        if(left[l] < right[r]){
+            result.push(left[l])
+        }else{
+            result.push(right[r])
+        }
+    }
+    return result.concat(left.slice(l)).concat(right.slice(r))
+}
     
