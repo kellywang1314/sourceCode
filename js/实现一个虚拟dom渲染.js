@@ -38,3 +38,23 @@ let domNode = {
       }
       return $el
   }
+
+  function render(obj){
+      let domOut = document.createElement(obj.tagName)
+      let {props,children} = obj
+      if(props){
+          for(let i in props){
+              domOut.setAttribute(i,props[i])
+          }
+      }
+      if(children){
+          for(let i in children){
+             let child 
+             child = typeof children[i] === 'object' 
+             ? render(children[i]) 
+             : document.createTextNode(children[i])
+             domOut.appendChild(child)
+          }
+      }
+      return domOut
+  }

@@ -18,3 +18,14 @@ function render(template,data){
     return template
 
 }
+
+
+function render(template,data){
+    let reg = /\{\{{w+}\}\}/
+    if(reg.test(template)){
+        const name = reg.exec(template)[1]
+        template = template.replace(reg, data[name])
+        return render(template, data)
+    }
+    return template
+}

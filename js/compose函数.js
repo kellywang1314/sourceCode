@@ -18,3 +18,15 @@ compose(toUpperCase,exclaim)('hello world')
 
 
 // compose是很多中间件的原理，比如redux和koa的中间件
+
+// very good
+function compose(){
+    let funcs = [...arguments]
+    return function(){
+        let res = [...arguments]
+        for(let i=funcs.length-1;i>=0;i--){
+            res = funcs[i](res)
+        }
+        return res
+    }
+}

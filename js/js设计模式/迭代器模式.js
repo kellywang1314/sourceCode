@@ -1,4 +1,4 @@
-// 提供一种方法顺序一个聚合对象中各个元素，而又不暴露该对象的内部表示。
+// 提供一种方法顺序输出一个聚合对象中各个元素，而又不暴露该对象的内部表示。
 class Iterator {
     constructor(conatiner) {
         this.list = conatiner.list

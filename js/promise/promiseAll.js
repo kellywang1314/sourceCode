@@ -7,30 +7,35 @@
 function PromiseAll(promises){
     let results = []
     let count = 0, len = promises.length
+     // 参数判断
+     if(!Array.isArray(promises)){
+        throw new TypeError("promises must be an array")
+    }
     return new Promise((resolve,reject) => {
        for(let i of promises){
            Promise.resolve(i).then((res) =>{
-                count++
                 results[count] = res
+                count++
                 if(len === count){
-                    return resolve(results)
+                    resolve(results)
                 }
-           },(err) => {return reject(err)})
+           }).catch(err => { reject({ message: err}) })
        }
     })
 }
 
 // 测试用例
-let promises = [new Promise((resolve) => {
-    setTimeout(() => {
-        resolve(1)
-    },4000)  
-}),new Promise((resolve) => {
-    setTimeout(() => {
-        resolve(2)
-    },3000)
-})]
-Promise.all(promises)
+let p1 = new Promise(resolve => { resolve('p1') })
+let p2 = new Promise(resolve => { setTimeout(() => { resolve('p2') }, 3000) })
+let p3 = new Promise(resolve => { resolve('p3') })
+let p4 = new Promise(resolve => { setTimeout(() => { resolve('p4') }, 1500) })
+let p5 = new Promise(resolve => { resolve('p5') })
+
+PromiseAll([p1, p2, p3, p4, p5]).then(res => {
+	console.log(res)
+}).catch(err => {
+	console.error(err)
+})
 
 
 /* 

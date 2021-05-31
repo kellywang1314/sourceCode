@@ -48,9 +48,25 @@ function debunce(fn, timeout) {
     }
 }
 
-function fn(parm){
+
+function throttle(fn, timeout){
+    let timer = null
+    return function(){
+        let args = [...arguments]
+        let that = this
+        if(!timer){
+            timer = setTimeout(() => {
+                fn.apply(that,args)
+                timer = null
+            },timeout)
+        }
+       
+    }
+}
+
+function f(parm){
     console.log(parm * 2)
 }
 
 
-window.addEventListener('resize', this.debunce(function(){fn(1)},1000))
+window.addEventListener('resize', this.throttle(() =>f(1),1000))

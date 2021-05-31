@@ -1,5 +1,5 @@
 // 插入排序  O(n^2) 稳定
-function insertSort(arr = []){
+function insertSort(arr = [0,-1,4,9,2,1]){
     let len = arr.length
     for(let i=0;i<len;i++){
         for(let j=i;j>=0;j--){
@@ -14,21 +14,20 @@ function insertSort(arr = []){
 
 }
 
-
-function insertSort(arr){
-    let len = arr.length
-    let index,insert
-    for(let i=0;i<len-1;i++){
-        index = i+1
-        insert = arr[i+1]
-        for(let j=i;j>=0;j--){
-            if(insert < arr[j]){
-                arr[j+1] = arr[j]
-                index = j
-            }
-        } 
-        arr[index] = insert 
+// 这是错的！！！
+function insertSort(arr = [0,-1,4,9,2,1]){
+    // 注意i的结束位置
+    for(let i=0; i<arr.length-1; i++){
+      let insert = i+1
+      let temp = arr[i+1]
+      for(let j=i;j>=0;j--){
+        if(arr[j] > arr[insert]){
+           insert = j
+        }
+      }
+      arr[i+1] = arr[insert]
+      arr[insert] = temp
     }
     return arr
-}
-    
+  }
+  insertSort()
