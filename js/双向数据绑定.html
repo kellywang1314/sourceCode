@@ -11,7 +11,7 @@
 
     <input id='myinput2'/>
     <div id='myId2'></div>
-    <!-- <script>
+    <script>
         // Object.defineProperty实现双向绑定
         let myInput = document.querySelector('#myinput')
         let myId = document.querySelector('#myId')
@@ -41,31 +41,7 @@
             targetP.hello = e.target.value
             
         })
-    </script> -->
-    <script>
-
-        function Parent(parent){
-            this.parent = parent
-        }
-
-        Parent.prototype.get = function(){
-            console.log(this.parent)
-        }
-
-        function Child(child,parent){
-            Parent.apply(this,parent)
-            this.child = child
-        }
-
-        Child.prototype = new Parent()
-        Child.prototype.constructor = Child
-
-        let child = new Child('child')
-        child.get()
-
-
     </script>
-
 </body>
 
 </html>

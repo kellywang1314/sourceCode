@@ -73,26 +73,26 @@ function asyncAdd(a,b,callback) {
   }
 
 // promise all
-  async function sum(...rest) {
-    let result = 0
-    const obj = {}
-    obj.toString = function(){
-        return result
-    }
-    const promises = []
-    for(let num of rest){
-        promiseAll.push(new Promise(resolve => {
-            asyncAdd(result,num,(_,res) => {
-                resolve(res)
-            })
-        }).then(res => {
-            result = res
-        })
-        )
-    }
-    await Promise.all(promises)
+//   async function sum(...rest) {
+//     let result = 0
+//     const obj = {}
+//     obj.toString = function(){
+//         return result
+//     }
+//     const promises = []
+//     for(let num of rest){
+//         promises.push(new Promise(resolve => {
+//             asyncAdd(result,num,(_,res) => {
+//                 resolve(res)
+//             })
+//         }).then(res => {
+//             result = res
+//         })
+//         )
+//     }
+//     await Promise.all(promises)
 
-  }
+//   }
   
   
   let start = window.performance.now()

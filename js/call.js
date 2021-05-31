@@ -27,4 +27,3 @@ export { myCall, myBind }
 
 
 // Array.prototype.slice.call(this,args)
-

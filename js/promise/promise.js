@@ -1,49 +1,28 @@
 // 实现一个promsie：https://juejin.cn/post/6945319439772434469
 // 适合面试中写的promsie, 主要是能实现then链式调用，参考https://juejin.im/post/5e6f4579f265da576429a907
-  function Promise(fn) {
-    this.cbs = [];
-    const resolve = (value) => {
-      setTimeout(() => {
-        this.data = value;
-        this.cbs.forEach((cb) => cb(value));
-      });
-    }
-    fn(resolve)
-  }
+  // function Promise(fn) {
+  //   this.cbs = [];
+  //   const resolve = (value) => {
+  //     setTimeout(() => {
+  //       this.data = value;
+  //       this.cbs.forEach((cb) => cb(value));
+  //     });
+  //   }
+  //   fn(resolve)
+  // }
   
-  Promise.prototype.then = function (onResolved) {
-    return new Promise((resolve) => {
-      this.cbs.push(() => {
-        const res = onResolved(this.data);
-        if (res instanceof Promise) {
-          res.then(resolve);
-        } else {
-          resolve(res);
-        }
-      })
-    })
-  }
-
-
-// 测试用例
-new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(1);
-    }, 500);
-  })
-    .then((res) => {
-      console.log(res)
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          resolve(2)
-        }, 500);
-      });
-    })
-    .then((res) => {
-        console.log(res)
-    });
-  
-
+  // Promise.prototype.then = function (onResolved) {
+  //   return new Promise((resolve) => {
+  //     this.cbs.push(() => {
+  //       const res = onResolved(this.data);
+  //       if (res instanceof Promise) {
+  //         res.then(resolve);
+  //       } else {
+  //         resolve(res);
+  //       }
+  //     })
+  //   })
+  // }
 
    /*  Promise 是一个类，在执行这个类的时候会传入一个执行器，这个执行器会立即执行
     Promise 会有三种状态
@@ -200,4 +179,23 @@ function resolvePromise(promise2, x, resolve, reject) {
       resolve(x)
     }
 }
+
+
+// 测试用例
+new Promise((resolve) => {
+  setTimeout(() => {
+    resolve(1);
+  }, 500);
+})
+  .then((res) => {
+    console.log(res)
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        resolve(2)
+      }, 500);
+    });
+  })
+  .then((res) => {
+      console.log(res)
+  });
 

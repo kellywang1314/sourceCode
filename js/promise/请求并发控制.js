@@ -68,7 +68,6 @@ class RequestDecorator {
 
 
 // 测试用例
-
 function delay(num, time){
     return new Promise((resolve,reject) => {
         setTimeout(() => {
