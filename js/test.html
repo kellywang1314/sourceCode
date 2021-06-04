@@ -6,27 +6,31 @@
     <title>Document</title>
 </head>
 <body>
-<div class="file-box"> 
-    <form id="uploadForm"> 
-        <input type="file" name="file" class="file" id="fileField" onchange="document.getElementById('textfield').value=this.files[0].name"/> 
-        <input type="submit" class="btn" value="上传" /> 
-    </form> 
- </div>
-<input type='text' id='input'/>
-<div id='text'></div>
+<div id='grow'>清除</div>
 <script>
-    let $input = document.querySelector('#input')
-    let $div = document.querySelector('#text')
-    let obj = {}
-    let proxyObject = new Proxy(obj,{
-        set(target,key,value){
-            $input.value = value
-            $div.innerHTML = value
-        }
-    })
-    $input.onchange=(e) => {
-        proxyObject['hello'] = e.target.value
+let wallace=[]//创建数组
+
+function createArray(){
+    for(let j=0;j<10000;j++){
+        wallace.push(j*3*5)
+        console.log(wallace)
     }
+}
+function clearArray(){
+   wallace=[]
+}
+
+
+createArray()//push内容，增加内存 
+
+
+let grow=document.getElementById("grow")
+grow.addEventListener("click",clearArray)//点击清除数组内容，也就是清除了内存
+
+
+// 
+
+
 </script>
 </body>
 </html>

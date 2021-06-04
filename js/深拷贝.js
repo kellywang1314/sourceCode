@@ -29,28 +29,12 @@ function deepCopy(obj,hash = new WeakMap()){
     return newObj
 }
 
+// 测试用例
 let a = {
     b:{
         c:[1,2,3],
-        e:'wa'
-    }
+        e:'wa',
+    },
 }
 copy(a)
 deepCopy(a)
-
-// very good !!!
-function deepCopy(obj,hash = new WeakSet()){
-    if(typeof obj !== 'object') return obj
-    if(hash.has(obj)) return hash.get(obj)
-    let newObj = obj instanceof Array ? [] :{}
-    hash.set(obj,newObj)
-    for(let i in obj){
-        if(typeof obj[i] === 'object'){
-            newObj[i] = deepCopy(obj[i],hash)
-        }else{
-            newObj[i] = obj[i]
-        }
-    }
-    return newObj
-
-}

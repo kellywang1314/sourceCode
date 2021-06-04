@@ -26,6 +26,10 @@ function add(a,b,c,d){
     let res = a+b+c+d
     return res
 }
-// console.log(curry(add,1,2,3,4));//输出 10
+console.log(curry(add,1,2,3,4));//输出 10
 console.log(curry(add,1,2,3)(4));//输出 10
+
+
+
+
 
