@@ -18,3 +18,16 @@ function render(template,data){
     return template
 
 }
+
+// 实现一个简单的字符串模版渲染
+// 例如字符串如下： 你好，我们是{{XXXX}}公司，是{{XXXX}}组，现在正在招聘{{XX.job[0]}}、{{XX['job'][1]}}等职位。
+const obj = {
+    company: 'XX公司',
+    hire: {
+        group: 'XX公司',
+        job: ['前端', '后端', '客户端']
+    }
+}
+function render (template, obj) {}
+
+

@@ -27,11 +27,11 @@ function PromiseAll(promises){
 // 测试用例
 let p1 = new Promise(resolve => { resolve('p1') })
 let p2 = new Promise(resolve => { setTimeout(() => { resolve('p2') }, 3000) })
-let p3 = new Promise(resolve => { resolve('p3') })
+let p3 = new Promise((resolve,reject) => { reject('p3') })
 let p4 = new Promise(resolve => { setTimeout(() => { resolve('p4') }, 1500) })
 let p5 = new Promise(resolve => { resolve('p5') })
 
-PromiseAll([p1, p2, p3, p4, p5]).then(res => {
+Promise.all([p1, p2, p3, p4, p5]).then(res => {
 	console.log(res)
 }).catch(err => {
 	console.error(err)
@@ -101,4 +101,3 @@ function asyncAdd(a,b,callback) {
     console.log(res)
     console.log(`程序执行共耗时: ${window.performance.now() - start}`)
   })
-  

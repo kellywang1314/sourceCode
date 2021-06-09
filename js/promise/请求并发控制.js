@@ -39,6 +39,7 @@ class RequestDecorator {
     try {
       this.currentConcurrent++;
       const result = await this.requestApi(...args);
+      console.log(result)
       return Promise.resolve(result);
     } catch (err) {
       return Promise.reject(err);
@@ -77,24 +78,76 @@ function delay(num, time){
 }
   
   // 通过maxLimit设置并发量限制，needChange2Promise将callback类型的请求api转化为promise类型的。
-  const requestInstance = new RequestDecorator({
-    maxLimit: 5,
+const requestInstance = new RequestDecorator({
+    maxLimit: 2,
     requestApi: delay,
     needChange2Promise: false,
-  });
+});
   
-  
-  let promises = [];
-  for (let i = 0; i < 30; i++) {
-    // 接下来你就可以像原来使用你的api那样使用它,参数和原来的是一样的
-    promises.push(requestInstance.request(i,1000).then(result => console.log('result', result), error => console.log(error)))
+  requestInstance.request(0,100).then(result => console.log('result', result))
+  requestInstance.request(1,1000).then(result => console.log('result', result))
+  requestInstance.request(2,300).then(result => console.log('result', result))
+  requestInstance.request(3,400).then(result => console.log('result', result))
+  requestInstance.request(4,500).then(result => console.log('result', result))
+
+
+
+
+
+
+  // 另外一种思想
+  class Scheduler {
+    constructor(limit) {
+      this.queue = [];
+      this.maxCount = limit;
+      this.runCounts = 0;
+    }
+    add(time, order) {
+      const promiseCreator = () => {
+        return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            console.log(order);
+            resolve();
+          }, time);
+        });
+      };
+      this.queue.push(promiseCreator);
+    }
+    taskStart() {
+      for (let i = 0; i < this.maxCount; i++) {
+        this.request();
+      }
+    }
+    request() {
+      if (!this.queue || !this.queue.length || this.runCounts >= this.maxCount) {
+        return;
+      }
+      this.runCounts++;
+      this.queue
+        .shift()()
+        .then(() => {
+          this.runCounts--;
+          this.request();
+        });
+    }
   }
-  async function test() {
-    await Promise.all(promises);
+  const scheduler = new Scheduler(2);
+  const addTask = (time, order) => {
+    scheduler.add(time, order);
+  };
+  addTask(1000, "1");
+  addTask(500, "2");
+  addTask(300, "3");
+  addTask(400, "4");
+  scheduler.taskStart();
+
+
+  parent.call(obj,...args)
+  function myCall(fn,...args){
+    let key = Symbol()
+    obj[key] = this
+    return obj[key](...args)
   }
+
+
   
-  test();
-  
-
-
-
