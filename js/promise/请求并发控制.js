@@ -15,7 +15,6 @@ class RequestDecorator {
   constructor ({
     maxLimit = 5,
     requestApi,
-    needChange2Promise,
   }) {
     // 最大并发量
     this.maxLimit = maxLimit;
@@ -25,7 +24,7 @@ class RequestDecorator {
     this.currentConcurrent = 0;
     // 使用者定义的请求api，若用户传入needChange2Promise为true,则将用户的callback类api使用pify这个库将其转化为promise类的。
     this.requestApi = requestApi;
-    // this.requestApi = needChange2Promise ? pify(requestApi) : requestApi;
+    
   }
   // 发起请求api
   async request(...args) {
@@ -92,62 +91,81 @@ const requestInstance = new RequestDecorator({
 
 
 
-
-
-
-  // 另外一种思想
-  class Scheduler {
-    constructor(limit) {
-      this.queue = [];
-      this.maxCount = limit;
-      this.runCounts = 0;
-    }
-    add(time, order) {
-      const promiseCreator = () => {
-        return new Promise((resolve, reject) => {
-          setTimeout(() => {
-            console.log(order);
-            resolve();
-          }, time);
-        });
-      };
-      this.queue.push(promiseCreator);
-    }
-    taskStart() {
-      for (let i = 0; i < this.maxCount; i++) {
-        this.request();
-      }
-    }
-    request() {
-      if (!this.queue || !this.queue.length || this.runCounts >= this.maxCount) {
-        return;
-      }
-      this.runCounts++;
-      this.queue
-        .shift()()
-        .then(() => {
-          this.runCounts--;
-          this.request();
-        });
-    }
-  }
-  const scheduler = new Scheduler(2);
-  const addTask = (time, order) => {
-    scheduler.add(time, order);
-  };
-  addTask(1000, "1");
-  addTask(500, "2");
-  addTask(300, "3");
-  addTask(400, "4");
-  scheduler.taskStart();
-
-
-  parent.call(obj,...args)
-  function myCall(fn,...args){
-    let key = Symbol()
-    obj[key] = this
-    return obj[key](...args)
-  }
-
-
+//   async function asyncPool(poolLimit, array, iteratorFn) {
+//     const result = [];
+//     const executing = [];
+//     for (const item of array) {
+//       const p = Promise.resolve().then(() => iteratorFn(item, array));
+//       result.push(p)
   
+//       if (poolLimit <= array.length) {
+//         const e = p.then(() => executing.splice(executing.indexOf(e), 1));
+//         executing.push(e);
+//         if (executing.length >= poolLimit) {
+//           await Promise.race(executing);
+//         }
+//       }
+//     }
+//     return Promise.all(result);
+//   }
+
+//   const getTaskFn = (item) => new Promise(resolve => {
+//     const id = item.id;
+//     const isExist = doingList.includes(id);
+//     if (!isExist) {
+//         doImgTask(item, browser, resolve);
+//         doingList.push(id);
+//     }
+// });
+// asyncPool(1, data, getTaskFn).then(async (res) => {
+//     console.log('asyncPool队列,全部执行完毕')
+//     await browser.close()
+// })
+
+
+const requestsLimit = (list, limit, asyncHandle) => {
+      return new Promise(resolve => {
+        let _limit = limit;
+        let recordList = []; // 记录异步操作
+        let index = 0;
+        let originListCopy = [].concat(list);
+        let asyncList = []; // 正在进行的所有并发异步操作
+        const asyncFunc = () => {
+          while(_limit--) {
+            const data = originListCopy.shift()
+            if (data) asyncList.push(asyncHandle(data, index++)); 
+          }
+          
+          Promise.all(asyncList).then(response => {
+            // 监听并记录每一次请求的结果
+            recordList = recordList.concat(response.filter(item => item));
+            if (originListCopy.length !== 0) {
+              _limit = limit;
+              asyncList = [];
+              asyncFunc() // 数组还未迭代完，递归继续进行迭代
+            } else {
+              // 所有并发异步操作都完成后，本次并发控制迭代完成，返回记录结果
+              resolve(recordList)
+            }
+          })
+        }
+        asyncFunc()
+      })
+  }
+ 
+   var dataLists = [1,2,3,4,5,6,7,8];
+  
+  requestsLimit(dataLists, 3, (item, index) => {
+    return new Promise(resolve => {
+      // 执行异步处理
+      setTimeout(() => {
+        // 筛选异步处理的结果
+        console.log(index)
+        if (item % 2 === 0) resolve({ item, index })
+        else resolve()
+      }, Math.random() * 5000)  
+    });
+  }).then(response => {
+    console.log('finish', response)
+  })
+

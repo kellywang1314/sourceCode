@@ -1,3 +1,11 @@
+/*
+ * @Author: your name
+ * @Date: 2020-07-14 16:24:35
+ * @LastEditTime: 2021-07-09 18:33:13
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit)
+ * @FilePath: /sourceCode/js/柯里化.js
+ */
 /* 
 *
 * 柯里化：本质就是把一个参数很多的函数分解成单一参数的多个函数(必包)
@@ -31,5 +39,31 @@ console.log(curry(add,1,2,3)(4));//输出 10
 
 
 
+
+// add(1)(2)(3) => 6
+
+function curry(fn){
+    let len = fn.length
+    let args = [...arguments].slice(1)
+    if(args.length === len){
+        return fn.apply(this,args)
+    }
+    function _curry(){
+        let that = this
+        args.push(...[...arguments])
+        if(args.length <len){
+            return _curry
+        }else{
+            return fn.apply(that,args)
+        }
+    }
+    return _curry
+}
+
+function fn(a,b,c){
+    return a+b+c
+}
+let add = curry(fn)
+add(1)(2)(3)
 
 

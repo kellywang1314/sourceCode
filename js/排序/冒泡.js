@@ -1,8 +1,16 @@
+/*
+ * @Author: your name
+ * @Date: 2020-08-07 09:45:13
+ * @LastEditTime: 2021-07-11 19:00:49
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: /sourceCode/js/排序/冒泡.js
+ */
 // O(n^2) 稳定
 function BubbleSort(arr){
     let len = arr.length
     for(let i=0; i<len;i++){
-        for(let j=0; j<=len-i;j++){
+        for(let j=0; j<len-i;j++){
             let temp
             if(arr[j] > arr[j+1]){
                 temp = arr[i]

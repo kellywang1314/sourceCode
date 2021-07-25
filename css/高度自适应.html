@@ -1,3 +1,11 @@
+<!--
+ * @Author: your name
+ * @Date: 2020-08-02 10:42:22
+ * @LastEditTime: 2021-07-14 09:06:59
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: /sourceCode/css/高度自适应.html
+-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,7 +18,7 @@
             width: 50%;
             overflow: hidden;
             /* padding-bottom这个属性，当它的值为百分比的时候，是按该元素的宽度来计算的。所以当设为100%的时候，其高度就等于自身的宽度，形成一个正方形 */
-            padding-bottom: 100%; 
+            padding-bottom: 50%; 
         }
 
         /* 图片是通过绝对定位来布局的，这样才能使图片跟随其父元素的大小改变来实现自适应。 */
@@ -23,29 +31,7 @@
 </head>
 <body>
     <div id="container" class="placeholder">
-        <img src="https://dimg04.c-ctrip.com/images/300v1b000001ah1uw5387_C_210_210.jpg" />
+        <img src="./1.jpeg" />
     </div>
 </body>
-<script>
-    // 深拷贝
-
-    function deepclone(obj,hash= new Map()){
-        if(typeof obj != 'object') return obj
-        if(hash.has(obj)) return hash.get(obj)
-        let newobj = Array.isArray(obj) ? [] :{}
-        hash.set(obj,newobj)
-        for(let i in obj){
-            if(typeof obj[i] === 'object'){
-                newobj[i] = deepclone(obj[i],hash)
-            }else{
-                newobj[i] = obj[i]
-            }
-        }
-        return newobj
-
-    }
-
-    
-    
-</script>
 </html>

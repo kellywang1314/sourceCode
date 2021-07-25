@@ -1,3 +1,4 @@
+
 // 浅拷贝
 function copy(obj){
     let newObj
@@ -36,5 +37,24 @@ let a = {
         e:'wa',
     },
 }
-copy(a)
-deepCopy(a)
+
+function deepCopy(obj,hash = new WeakMap()){
+    if(typeof obj !== 'object') return obj
+    let newObj = Array.isArray(obj) ? [] : {}
+    if(hash.has(obj)){
+        return hash.get(obj)
+    }
+    hash.set(obj,newObj)
+    for(let i in obj){
+        if(typeof obj[i] === 'object'){
+            newObj[i] = deepCopy(obj[i],hash)
+        }else{
+            newObj[i] = obj[i]
+        }
+    }
+    return newObj
+}
+
+
+ 
+

@@ -1,3 +1,4 @@
+
 function jsonp (url,data={},callback='callback') {
     //处理json对象，拼接url
     data.callback = callback
@@ -33,5 +34,8 @@ jsonp('http://photo.sina.cn/aj/index',{
 },'jsoncallback').then(data => {
     console.log(data)
 })
+
+
+
 
 

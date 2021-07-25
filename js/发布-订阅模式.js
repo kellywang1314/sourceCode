@@ -1,4 +1,3 @@
-// https://juejin.cn/post/6968713283884974088
 
 class EventEmitter{
     callBacks = {}
@@ -36,6 +35,8 @@ class EventEmitter{
 // 测试用例
 const event = new EventEmitter();
 
+
+
 const handle = (...rest) => {
   console.log(rest);
 }
@@ -52,3 +53,44 @@ event.once("dbClick", () => {
 });
 event.emit("dbClick")
 event.emit("dbClick")
+
+
+
+
+class EventEmit{
+    constructor(){
+        this.handleEventCallback = {}
+    }
+
+    emit(eventType,...rest){
+        for(let i in this.handleEventCallback){
+            if(eventType === i){
+                let temp = this.handleEventCallback[eventType]
+                temp.forEach((item) => item.apply(this,rest))
+            }
+        }
+    }
+
+    off(eventType,callBack){
+        if(!this.handleEventCallback[eventType] ) return 
+        this.handleEventCallback[eventType] = this.handleEventCallback[eventType].filter((item) => item!=callBack)
+    }
+
+    on(eventType,callBack){
+        if(!this.handleEventCallback[eventType]){
+            this.handleEventCallback[eventType]= []
+        }
+        this.handleEventCallback[eventType].push(callBack)
+    }
+
+    // 这里需要注意，调用on 注册
+    once(eventType,callBack){
+        const fn = () => {
+            callBack()
+            this.off(eventType, fn)
+          }
+          this.on(eventType, fn)
+
+
+    }
+}

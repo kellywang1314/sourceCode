@@ -1,3 +1,4 @@
+
 let domNode = {
     tagName: 'ul',
     props: { class: 'list' },
@@ -37,4 +38,26 @@ let domNode = {
         $el = document.createTextNode(domNode)
       }
       return $el
+  }
+
+
+  function render(domNode){
+      if(!domNode) return null
+      let node = document.createElement(domNode.tagName)
+      if(domNode.props){
+          for(let i in domNode.props){
+              node.setAttribute(i,domNode.props[i])
+          }
+      }
+      if(domNode.children){
+         for(let i in domNode.children){
+             if(typeof domNode.children[i] === 'object'){
+                node.appendChild(render(domNode.children[i]))
+             }else{
+                node.appendChild(document.createTextNode(domNode.children[i]))
+             }
+         }
+      }
+      return node
+      
   }

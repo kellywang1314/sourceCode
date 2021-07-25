@@ -1,3 +1,4 @@
+
 //二分查找
 module.exports =  Binsearch = (arr,low,high,target) => {
     if(low > high) return -1
@@ -10,3 +11,4 @@ module.exports =  Binsearch = (arr,low,high,target) => {
         return pos
     }
 }
+

@@ -36,3 +36,4 @@ Array.prototype.someNew = function (fn) {
 
 // Array.from()的实现
 Array.prototype.slice.call(this)
+

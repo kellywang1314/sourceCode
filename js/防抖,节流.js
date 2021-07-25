@@ -1,3 +1,4 @@
+
 /* 
 1. 什么是防抖和节流
 节流和防抖都是对频繁触发的事件进行限制的性能优化手段，节流是控制高频操作经过多久运行一次；防抖是当高频操作经过时间t没有在重复触发才会执行一次
@@ -68,5 +69,4 @@ function f(parm){
     console.log(parm * 2)
 }
 
-
-window.addEventListener('resize', this.throttle(() =>f(1),1000))
+window.addEventListener('resize', this.debunce(() =>f(1),1000))

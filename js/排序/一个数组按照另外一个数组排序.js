@@ -33,5 +33,3 @@ function twoSum(arr=[],target){
     }
     return []
 }
-
-console.log(list);

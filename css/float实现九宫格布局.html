@@ -29,14 +29,7 @@
             overflow: hidden;
         }
 
-        /* float布局*/
-        .float::after {
-            content: "";
-            display: block;
-            clear: both;
-            visibility: hidden;
-        }
-
+       
         .float>li {
             float: left;
             background-color: #42a59f;
@@ -46,6 +39,14 @@
         }
         .float>li:nth-of-type(n+7){  /* 选择倒数的三个元素，n可以取0 */
             margin-bottom: 0;
+        }
+
+         /* 清除浮动*/
+        .float::after {
+            content: "";
+            display: block;
+            clear: both;
+            visibility: hidden;
         }
 
     </style>

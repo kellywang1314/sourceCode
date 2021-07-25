@@ -1,3 +1,11 @@
+/*
+ * @Author: your name
+ * @Date: 2020-07-31 19:45:41
+ * @LastEditTime: 2021-07-23 15:08:26
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: /sourceCode/js/js设计模式/单例模式.js
+ */
 
 // 单例模式 : 引用第三方库; 本地存储localstoage
 class LoginForm {

@@ -1,3 +1,11 @@
+/*
+ * @Author: your name
+ * @Date: 2020-07-01 14:15:31
+ * @LastEditTime: 2021-07-12 14:04:56
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: /sourceCode/js/promise/promsieAjax.js
+ */
 // 基于promise实现ajax请求
 const ajaxMise = (url = '', method = 'get', data = {}, async = true, headers = {}) => {
     var xhr = new XMLHttpRequest()
@@ -35,3 +43,4 @@ const getImage = () => {
         img.src = src
     })
 }
+

@@ -73,26 +73,36 @@ class MyPromise {
     }
   };
 
-  then(onFulfilled, onRejected) {
-    const realOnFulfilled =
-      typeof onFulfilled === "function" ? onFulfilled : (value) => value;
-    const realOnRejected =
-      typeof onRejected === "function"
-        ? onRejected
-        : (reason) => {
-            throw reason;
-          };
 
+  resolvePromise(promise2, x, resolve, reject) {
+    // 如果相等了，说明return的是自己，抛出类型错误并返回
+    // if (promise2 === x) {
+    //   return reject(
+    //     new TypeError("Chaining cycle detected for promise #<Promise>")
+    //   );
+    // }
+    // 判断x是不是 MyPromise 实例对象
+    if (x instanceof MyPromise) {
+      // 执行 x，调用 then 方法，目的是将其状态变为 fulfilled 或者 rejected
+      x.then(resolve, reject);
+    } else {
+      // 普通值
+      resolve(x);
+    }
+  }
+  
+
+  then(onFulfilled, onRejected) {
     // 为了链式调用这里直接创建一个 MyPromise，并在后面 return 出去
     const promise2 = new MyPromise((resolve, reject) => {
       const fulfilledMicrotask = () => {
         // 创建一个微任务等待 promise2 完成初始化
-        queueMicrotask(() => {
+        setTimeout(() => {
           try {
             // 获取成功回调函数的执行结果
-            const x = realOnFulfilled(this.value);
+            const x = onFulfilled(this.value);
             // 传入 resolvePromise 集中处理
-            resolvePromise(promise2, x, resolve, reject);
+            this.resolvePromise(promise2, x, resolve, reject);
           } catch (error) {
             reject(error);
           }
@@ -101,12 +111,12 @@ class MyPromise {
 
       const rejectedMicrotask = () => {
         // 创建一个微任务等待 promise2 完成初始化
-        queueMicrotask(() => {
+        setTimeout(() => {
           try {
             // 调用失败回调，并且把原因返回
-            const x = realOnRejected(this.reason);
+            const x = onRejected(this.reason);
             // 传入 resolvePromise 集中处理
-            resolvePromise(promise2, x, resolve, reject);
+            this.resolvePromise(promise2, x, resolve, reject);
           } catch (error) {
             reject(error);
           }
@@ -120,7 +130,6 @@ class MyPromise {
       } else if (this.status === PENDING) {
         // 等待
         // 因为不知道后面状态的变化情况，所以将成功回调和失败回调存储起来
-        // 等到执行成功失败函数的时候再传递
         this.onFulfilledCallbacks.push(fulfilledMicrotask);
         this.onRejectedCallbacks.push(rejectedMicrotask);
       }
@@ -130,41 +139,20 @@ class MyPromise {
   }
 }
 
-function resolvePromise(promise2, x, resolve, reject) {
-  // 如果相等了，说明return的是自己，抛出类型错误并返回
-  if (promise2 === x) {
-    return reject(
-      new TypeError("Chaining cycle detected for promise #<Promise>")
-    );
-  }
-  // 判断x是不是 MyPromise 实例对象
-  if (x instanceof MyPromise) {
-    // 执行 x，调用 then 方法，目的是将其状态变为 fulfilled 或者 rejected
-    // x.then(value => resolve(value), reason => reject(reason))
-    // 简化之后
-    x.then(resolve, reject);
-  } else {
-    // 普通值
-    resolve(x);
-  }
-}
-
 new MyPromise((resolve) => {
   setTimeout(() => {
     resolve(1);
   }, 500);
 })
-  .then((res) => {
-    console.log(res);
-    return new MyPromise((resolve) => {
-      setTimeout(() => {
-        resolve(2);
-      }, 500);
-    });
-  })
-  .then((res) => {
-    console.log(res);
+.then((res) => {
+  console.log(res);
+  return new MyPromise((resolve) => {
+    setTimeout(() => {
+      resolve(2);
+    }, 500);
   });
-
-
+})
+.then((res) => {
+  console.log(res);
+});
 

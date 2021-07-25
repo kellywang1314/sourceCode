@@ -31,7 +31,7 @@ let p3 = new Promise((resolve,reject) => { reject('p3') })
 let p4 = new Promise(resolve => { setTimeout(() => { resolve('p4') }, 1500) })
 let p5 = new Promise(resolve => { resolve('p5') })
 
-Promise.all([p1, p2, p3, p4, p5]).then(res => {
+PromiseAll([p1, p2, p3, p4, p5]).then(res => {
 	console.log(res)
 }).catch(err => {
 	console.error(err)
