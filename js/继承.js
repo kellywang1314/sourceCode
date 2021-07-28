@@ -84,7 +84,7 @@ function object(o){
     function F(){}
     F.prototype = o
     return new F()
-  }
+}
 
 var person = {
     name: "Nicholas",
@@ -161,6 +161,7 @@ v2.getP()
     ES6子类实例的构建，基于父类实例，所以必须先调用super方法；ES5中不是，先创建子类实例this对象，然后再对其使用父类增强
 
  */
+
 
 
 

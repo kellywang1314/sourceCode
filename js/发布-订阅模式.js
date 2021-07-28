@@ -32,11 +32,9 @@ class EventEmitter{
 
 }
 
+
 // 测试用例
 const event = new EventEmitter();
-
-
-
 const handle = (...rest) => {
   console.log(rest);
 }

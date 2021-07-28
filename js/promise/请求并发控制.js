@@ -151,11 +151,12 @@ const requestsLimit = (list, limit, asyncHandle) => {
         }
         asyncFunc()
       })
-  }
+}
+
  
-   var dataLists = [1,2,3,4,5,6,7,8];
+var dataLists = [1,2,3,4,5,6,7,8];
   
-  requestsLimit(dataLists, 3, (item, index) => {
+requestsLimit(dataLists, 3, (item, index) => {
     return new Promise(resolve => {
       // 执行异步处理
       setTimeout(() => {
