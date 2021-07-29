@@ -33,11 +33,11 @@ Function.prototype.myBind = function (context, ...args) {
       if (this instanceof _this === true) {
         // 此时this指向指向result的实例  这时候不需要改变this指向
         this[fn] = _this;
-        this[fn](...[...args, ...innerArgs]); //这里使用es6的方法让bind支持参数合并
+        this[fn].apply(context,[...args, ...innerArgs])
         delete this[fn];
       } else {
         // 如果只是作为普通函数调用  那就很简单了 直接改变this指向为传入的context
-        context[fn](...[...args, ...innerArgs]);
+        context[fn].apply(context,[...args, ...innerArgs])
         delete context[fn];
       }
     };

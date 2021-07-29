@@ -50,21 +50,6 @@ function debunce(fn, timeout) {
 }
 
 
-function throttle(fn, timeout){
-    let timer = null
-    return function(){
-        let args = [...arguments]
-        let that = this
-        if(!timer){
-            timer = setTimeout(() => {
-                fn.apply(that,args)
-                timer = null
-            },timeout)
-        }
-       
-    }
-}
-
 function f(parm){
     console.log(parm * 2)
 }

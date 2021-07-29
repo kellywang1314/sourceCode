@@ -24,3 +24,4 @@ function retryAsync ( asyncFn, count = 3, isShowLog ) {
         }
     })
 }
+

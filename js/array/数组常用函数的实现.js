@@ -11,7 +11,7 @@ Array.prototype.myMap = function(fn){
 Array.prototype.myFilter = function(fn){
     let temp = []
     for(let i=0; i<this.length; i++){
-        fn(this[i]) && temp(fn(this[i],i,this))
+        fn(this[i]) && temp.push(fn(this[i],i,this))
     }
     return temp
 }
