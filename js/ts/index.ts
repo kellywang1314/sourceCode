@@ -54,7 +54,7 @@ function getName<T,U> (name: T, id: U): [T, U] {
 }
 getName('peen', 1);
 getName('peen', '222'); // 正常
-getName<string, number>('peen', '22'); // 报错: '22'不是number类型
+// getName<string, number>('peen', '22'); // 报错: '22'不是number类型
 
 
 // 1. keyof， keyof T的结果为T上已知的公共属性名的联合
