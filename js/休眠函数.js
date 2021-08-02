@@ -1,5 +1,3 @@
-
-
 function sleep (ms = 100) {
     let sleepSwitch = true
     let s = Date.now()

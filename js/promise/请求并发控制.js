@@ -90,39 +90,7 @@ const requestInstance = new RequestDecorator({
   requestInstance.request(4,500).then(result => console.log('result', result))
 
 
-
-//   async function asyncPool(poolLimit, array, iteratorFn) {
-//     const result = [];
-//     const executing = [];
-//     for (const item of array) {
-//       const p = Promise.resolve().then(() => iteratorFn(item, array));
-//       result.push(p)
-  
-//       if (poolLimit <= array.length) {
-//         const e = p.then(() => executing.splice(executing.indexOf(e), 1));
-//         executing.push(e);
-//         if (executing.length >= poolLimit) {
-//           await Promise.race(executing);
-//         }
-//       }
-//     }
-//     return Promise.all(result);
-//   }
-
-//   const getTaskFn = (item) => new Promise(resolve => {
-//     const id = item.id;
-//     const isExist = doingList.includes(id);
-//     if (!isExist) {
-//         doImgTask(item, browser, resolve);
-//         doingList.push(id);
-//     }
-// });
-// asyncPool(1, data, getTaskFn).then(async (res) => {
-//     console.log('asyncPool队列,全部执行完毕')
-//     await browser.close()
-// })
-
-
+// 利用promise分组，每次利用promise.all执行完一组之后在执行下一组
 const requestsLimit = (list, limit, asyncHandle) => {
       return new Promise(resolve => {
         let _limit = limit;
@@ -153,9 +121,7 @@ const requestsLimit = (list, limit, asyncHandle) => {
       })
 }
 
- 
 var dataLists = [1,2,3,4,5,6,7,8];
-  
 requestsLimit(dataLists, 3, (item, index) => {
     return new Promise(resolve => {
       // 执行异步处理
@@ -169,4 +135,50 @@ requestsLimit(dataLists, 3, (item, index) => {
   }).then(response => {
     console.log('finish', response)
   })
+
+
+
+
+// 第一种方法不太好，需要等
+function limitLoad(urls, handler, limit) {
+  let sequence = [...urls] // 复制urls
+  // 这一步是为了初始化 promises 这个"容器"
+  let promises = sequence.splice(0, limit).map((url, index) => {
+    return handler(url).then(() => {
+      // 返回下标是为了知道数组中是哪一项最先完成
+      return index;
+    });
+  });
+  // 注意这里要将整个变量过程返回，这样得到的就是一个Promise，可以在外面链式调用
+  return sequence
+    .reduce((pCollect, url) => {
+      return pCollect.then(() => {
+          return Promise.race(promises); // 返回已经完成的下标
+        })
+        .then(fastestIndex => { // 获取到已经完成的下标
+        	// 将"容器"内已经完成的那一项替换
+          promises[fastestIndex] = handler(url).then(
+            () => {
+              return fastestIndex; // 要继续将这个下标返回，以便下一次变量
+            }
+          );
+        })
+        .catch(err => {
+          console.error(err);
+        });
+    }, Promise.resolve()) // 初始化传入
+    // 直到urls已经遍历完了，然后将最后三个没有完成的请求(也就是状态没有改变的Promise)用Promise.all()来加载它们。
+    .then(() => { 
+      return Promise.all(promises);
+    });
+}
+limitLoad(urls, loadImg, 3)
+  .then(res => {
+    console.log("图片全部加载完毕");
+    console.log(res);
+  })
+  .catch(err => {
+    console.error(err);
+  });
+
 

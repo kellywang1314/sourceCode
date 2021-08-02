@@ -1,0 +1,68 @@
+// 请使用 2-3 次 replace 方法，将下面字符串转换成 JSON 结构，然后输出 json
+// 字符串'var msg = "{\"url\":\"MBU0016G7G004SS00081\",\"data\":{\"a\":1,\"b\":[2,3]}}";'
+
+let str = 'var msg = "{\"url\":\"MBU0016G7G004SS00081\",\"data\":{\"a\":1,\"b\":[2,3]}}";'
+str.replace(/\\/g,'').replace(/[\'|\']/,'')
+
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <title>真·实时天气</title>
+</head>
+
+<body>
+    <script>
+        // 每 5s 更新一次 
+        // 彩云天气 API 文档：http://wiki.swarma.net/index.php?title=%E5%BD%A9%E4%BA%91%E5%A4%A9%E6%B0%94API/v2&variant=zh 
+        setInterval(function () {
+            fetch('https://api.caiyunapp.com/v2/TAkhjf8d1nlSlspN/121.6544,25.1552/realtime.json').then(function (res) {
+                if (res.data.result.skycon === 'CLEAR_DAY') {
+                    document.getElementById('status').innerHTML = '晴';
+                }
+                document.getElementById('Temperature').innerHTML = res.data.result.temperature + '℃'
+            });
+        }, 5000);
+    </script>
+    <h1>真·实时天气</h1>
+    <div class="Wrapper"> <span>当前天气：<strong id="status"></strong></span> <span> 当前温度： <h1 id="Temperature">-</h1>
+        </span> </div>
+    <style>
+        body {
+            background-color: #fafcff;
+        }
+
+        h1 {
+            color: #666
+        }
+
+        .Wrapper {
+            margin: 50px auto;
+            border: 1px solid #eee;
+            height: 100px;
+            background: #fff;
+            width: 400px;
+            padding: 20px 30px;
+            border-radius: 6px;
+            color: #666;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, .1);
+        }
+
+        .Wrapper span:first-child {
+            border-right: 1px solid #eee;
+            display: inline-block;
+            height: 100%;
+            width: 150px;
+        }
+
+        .Wrapper span h1 {
+            float: right;
+            font-size: 60px;
+        }
+    </style>
+</body>
+
+</html>
+﻿

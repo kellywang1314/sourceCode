@@ -1,0 +1,100 @@
+// 写一个弹窗组件，有一个展示区域和关闭按钮，不要求样式，但需要提供测试用例
+// https://ant.design/components/modal-cn/#header﻿
+// 全局事件响应处理
+// 嵌套弹窗
+// 代码规范
+// 测试用例
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+    <style>
+        .box-default {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            z-index: 99;
+            padding: 20px;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+        }
+
+        .box-vc-trf {
+            transform: translate(-50%, -50%);
+        }
+
+        .mask {
+            display: none;
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 98;
+            background-color: #000;
+            opacity: 0.75;
+
+        }
+
+
+        .box-in {
+            display: block;
+        }
+
+
+        .mask-in {
+            display: block;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="box-default box-vc-trf">this is a pop-up box</div>
+    <div class="mask"></div>
+    <button class="btn">click</button>
+    <button class="btn">click2</button>
+    <button class="btn">click3</button>
+    <script>
+        $(function () {
+            var $box = $('.box-default'),
+                $mask = $('.mask');
+
+            $mask.on('click', function (event) {
+                event.preventDefault();
+                hideMask();
+            });
+
+            $('.btns').forEach(function (el, i) {
+                el.on('click', function (event) {
+                    event.preventDefault();
+                    var content = getText($(this));
+                    showMask(content);
+                })
+            });
+
+            function getText(obj) {
+                return obj.text()
+            }
+
+            function showMask(content) {
+                $box.addClass('box-in').html(content);
+                $mask.addClass('mask-in');
+            }
+
+            function hideMask(obj) {
+                $mask.removeClass('mask-in');
+                $box.removeClass('box-in');
+            }
+        });
+    </script>
+
+</body>
+
+</html>
