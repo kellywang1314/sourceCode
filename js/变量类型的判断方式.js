@@ -1,11 +1,3 @@
-/*
- * @Author: your name
- * @Date: 2020-06-25 19:27:30
- * @LastEditTime: 2021-07-09 12:39:57
- * @LastEditors: Please set LastEditors
- * @Description: In User Settings Edit/
- * @FilePath: /sourceCode/js/变量类型的判断方式.js
- */
 /* 
 js 类型检测方法的四种方法 
     typeof
@@ -38,3 +30,4 @@ console.log(Object.prototype.toString.call(d));    // [object Object]
 
 
 // 4. constructor属性返回对创建此对象的数组函数的引用。
+

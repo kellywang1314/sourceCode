@@ -26,3 +26,30 @@ const f = 100 + parseInt('uy10')   // NAN
 
 null == undefined   // true
 null === undefined  //false
+
+
+function A(){
+    this.name = 'A'
+    return -1
+}
+function B(){
+    this.name = 'B'
+    return {name:'b'}
+}
+A.prototype.getName = B.prototype.getName = function(){
+    console.log(this.name)
+}
+const a = new A()
+console.log(a.name)
+const b = new B()
+console.log(b.name)
+console.log(a.getName())
+console.log(b.getName())
+
+console.log(a)
+function a(){} // ƒ a(){}
+
+
+
+
+

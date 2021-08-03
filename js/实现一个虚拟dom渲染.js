@@ -16,7 +16,7 @@ let domNode = {
       <li>item1</li>
       <li>item2</li>
   </ul>
-  
+
 
   function render(domNode) {
       if(!domNode) return document.createDocumentFragment()
