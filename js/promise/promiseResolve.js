@@ -10,13 +10,13 @@ Promise.resolve = function (param) {
     if (param instanceof Promise) {
     return param;
 }
-return new Promise((resolve, reject) => {
-    if (param && param.then && typeof param.then === 'function') {
-        setTimeout(() => {
-            param.then(resolve, reject);
-        });
-    } else {
-        resolve(param);
-    }
-});
+    return new Promise((resolve, reject) => {
+        if (param && param.then && typeof param.then === 'function') {
+            setTimeout(() => {
+                param.then(resolve, reject);
+            });
+        } else {
+            resolve(param);
+        }
+    });
 }

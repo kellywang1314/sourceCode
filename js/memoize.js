@@ -10,6 +10,19 @@ function memoize(func) {
     memoize.cache = {}
     return memoize
 }
+
+
+let memoize = function(fn){
+    let cache = {};
+    return function(...args){
+        let key = JSON.stringify(args);
+        if(!cache.hasOwnProperty(key)){
+            cache[key] = fn.apply(this,args);
+        }
+        return cache[key];
+    };
+}
+
   
   
   
