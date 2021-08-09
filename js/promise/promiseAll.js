@@ -14,7 +14,7 @@ function PromiseAll(promises){
     return new Promise((resolve,reject) => {
        for(let i of promises){
            Promise.resolve(i).then((res) =>{
-                results[count] = res
+                results[i] = res
                 count++
                 if(len === count){
                     resolve(results)

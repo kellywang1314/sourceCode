@@ -4,6 +4,12 @@
 如果还有后续数组，重复上述过程 
 */
 
+let arr = [
+    ['A','B'],
+    ['a','b'],
+    ['1','2']
+]
+
 let res = arr.reduce((prev, cur) => {
     const emptyVal = []
     console.log(prev)
@@ -14,3 +20,4 @@ let res = arr.reduce((prev, cur) => {
     })
     return emptyVal
 })
+

@@ -47,4 +47,4 @@ function mergeSort(left,right){
 }
 
 
-merge([[12,2],[23,5],[55,67],[23,12]])
+merge([[12,21],[5,23],[55,67]])

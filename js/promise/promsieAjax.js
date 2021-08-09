@@ -44,3 +44,11 @@ const getImage = () => {
     })
 }
 
+
+// H5 API fetch
+/* 
+1. 调用方式不同
+2. fetch是基于promise设计的
+*/
+
+
