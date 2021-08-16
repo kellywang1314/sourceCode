@@ -19,9 +19,6 @@ Function.prototype.myCall = function(context,...args){
 
 //bind的实现:同call不同的是不是立即执行的
 Function.prototype.myBind = function (context, ...args) {
-    if (!context || context === null) {
-      context = window;
-    }
     // 创造唯一的key值  作为我们构造的context内部方法名
     let fn = Symbol();
     context[fn] = this;

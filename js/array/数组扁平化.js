@@ -21,12 +21,27 @@ function fn(arr){　　　　
 }
 
 
-// reduce
+// 递归reduce
 function fn(arr) {
     return arr.reduce((res, element) => {
         let temp = Array.isArray(element) ? fn(element) : element
         return res.concat(temp)
     }, [])
+}
+
+// 迭代
+function flatten(arr=[1,[2,3],[4,[5,6]]]){
+    let temp = [...arr]
+    let res = []
+    while(temp.length){
+        let item = temp.shift()
+        if(Array.isArray(item)){
+            temp.unshift(...item)
+        }else{
+            res.push(item)
+        }
+    }
+    return res
 }
 
 // toString

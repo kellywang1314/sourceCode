@@ -26,3 +26,19 @@ function compose(...fn) {
 let toUpperCase = (x) => x.toUpperCase()
 let exclaim = (x) => x + '!';
 compose(toUpperCase,exclaim)('hello world')
+
+
+const obj = {
+    a:{
+        a1:1,
+        a2:{
+            a12:2
+        }
+    },
+    b:234,
+    c:{
+        c1:3
+    }
+}
+
+[a.a1,a.a2.a12,b,c.c1]

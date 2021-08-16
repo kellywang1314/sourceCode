@@ -56,5 +56,37 @@ function deepCopy(obj,hash = new WeakMap()){
 }
 
 
- 
+// 怎么递归获取一个对象
+function getDeepObject(obj, parentPre = '', target = []) {
+    for (let key in obj) {
+        const childrenObj = obj[key]
+        const childrenPre = parentPre + key;
+        if (typeof childrenObj=== "object") {
+            getDeepObject(childrenObj, childrenPre + '.', target)
+        } else {
+            target.push(childrenPre)
+        }
+    }
+    return target;
+}
 
+const obj = {
+    a:{
+        a1:123,
+        a2:{
+            a21:{
+                a211:1
+            },
+        }
+    },
+    b:3
+}
+getDeepObject(obj)
+
+
+function a(){}
+const b = new a()
+a.__proto__ === Function.prototype
+b.__proto__ === a.prototype
+b.__proto__.__proto__ === Object.prototype
+a.prototype.__proto__ === Object.prototype
