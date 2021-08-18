@@ -28,6 +28,9 @@ Parent.prototype.getName = function(){
 function Child(child){
     this.child = child
 }
+// 啊
+
+
 
 Child.prototype = new Parent()
 Child.prototype.constructor = Child
