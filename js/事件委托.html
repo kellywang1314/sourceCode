@@ -44,6 +44,24 @@
 
         // delegate(dom, click, span, 
 
+
+ function sleep(i,ms = 1000){
+     return new Promise((resolve,reject) => {
+        setTimeout(() => {
+            console.log(i)
+            resolve()
+        },ms)
+     })
+ }
+
+async function fn(){
+    for(let i=0; i<5; i++){
+        await sleep(i)
+    }
+}
     </script>
 </body>
 </html>
+
+
+
