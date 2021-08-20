@@ -16,9 +16,6 @@ function combinationSum2(num, target) {
 }
 
 function dfs(num, target, tmp, tmpArr, res, start) {
-
-
-
     if (tmp == target) {
 
         let newArr = [...tmpArr]
@@ -44,3 +41,5 @@ function dfs(num, target, tmp, tmpArr, res, start) {
     }
 
 }
+
+
