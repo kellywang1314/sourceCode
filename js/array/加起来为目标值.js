@@ -17,16 +17,13 @@ function combinationSum2(num, target) {
 
 function dfs(num, target, tmp, tmpArr, res, start) {
     if (tmp == target) {
-
         let newArr = [...tmpArr]
         res.push(newArr)
         return
     }
 
     if (start >= num.length) return
-
     for (let i = start; i < num.length; ++i) {
-
         if (i > start && num[i] == num[i - 1]) continue
         let n = num[i]
         if ((tmp + n) <= target) {
@@ -37,9 +34,7 @@ function dfs(num, target, tmp, tmpArr, res, start) {
             tmp = tmp - n
         }
 
-
     }
 
 }
-
 
