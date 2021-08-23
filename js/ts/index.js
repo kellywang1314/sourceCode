@@ -3,6 +3,9 @@
                                     // interface和type
 // 1. interface 只能定义对象类型, 而 type 声明可以声明任何类型，包括基础类型、联合类型或交叉类型。
 // 2. 接口可以 extends、implements,从而扩展多个接口或类。类型没有扩展功能，只能交叉合并
+
+
+// d.ts和直接声明的区别，d.ts可以让你在ts中调用的js的声明文件
 // 联合类型
 interface Square {
     kind: "square";
@@ -28,8 +31,10 @@ function area(s: Shape) {
 area({kind:"rectangle",width:12,height:13})
 area({kind:"square",size:12 })
 
-// 泛型
 
+
+
+// 泛型，泛型可以创建可重用的组件,一个组件可以支持多种类型,解决类,接口,方法的复用性,以及对不确定数据类型的使用
 function getVal(val) {
     return val
 }
