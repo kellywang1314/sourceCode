@@ -13,19 +13,27 @@ function copy(obj){
     return newObj
 }
 
+// 常用的JSON.parse(JSON.stringfiy(obj))
+// 这种方式依赖JSON，因此它不支持JSON不支持的格式的，比如函数/undefined/Date/RegExp等
+// 还会丢失原型上的属性
 
 // 深拷贝
+// hash是用来保存已经克隆过的对象和它对应的克隆地址，防止递归没有退出条件爆栈
 function deepCopy(obj,hash = new WeakMap()){
     if(typeof obj !== 'object') return obj
     if(hash.has(obj)) return hash.get(obj)
     let newObj = Object.prototype.toString.call(obj) === '[object Object]' ? {} : []
     hash.set(obj,newObj)
     for(let i in obj){
-        if(typeof obj[i] === 'object'){
-            newObj[i] = deepCopy(obj[i],hash)
-        }else{
-            newObj[i] = obj[i] 
+        // 过滤掉原型上的属性
+        if(obj.hasOwnProperty(i)){
+            if(typeof obj[i] === 'object'){
+                newObj[i] = deepCopy(obj[i],hash)
+            }else{
+                newObj[i] = obj[i] 
+            }
         }
+       
     }
     return newObj
 }
