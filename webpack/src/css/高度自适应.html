@@ -1,0 +1,40 @@
+<!--
+ * @Author: your name
+ * @Date: 2020-08-02 10:42:22
+ * @LastEditTime: 2021-07-14 09:06:59
+ * @LastEditors: Please set LastEditors
+ * @Description: In User Settings Edit
+ * @FilePath: /sourceCode/css/高度自适应.html
+-->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #container {
+            position: relative;
+            width: 50%;
+            overflow: hidden;
+            /* padding-bottom这个属性，当它的值为百分比的时候，是按该元素的宽度来计算的。所以当设为100%的时候，其高度就等于自身的宽度，形成一个正方形 */
+            padding-bottom: 50%;
+        }
+
+        /* 图片是通过绝对定位来布局的，这样才能使图片跟随其父元素的大小改变来实现自适应。 */
+        img {
+            position: absolute;
+            top: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container" class="placeholder">
+        <img src="./1.jpeg" />
+    </div>
+</body>
+
+</html>

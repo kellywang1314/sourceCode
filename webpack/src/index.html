@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>前端实时测试仓库</title>
+</head>
+
+<body>
+  <div id="app">
+    <ul id='u'>
+      <li><span>1</span></li>
+      <li><span>2</span></li>
+      <li><span>3</span></li>
+      <li><span>4</span></li>
+    </ul>
+    <script src="./index.js">
+      const dom = document.getElementById('u')
+      dom.addEventListener('click', (e) => {
+        console.log(e.target.innerText)
+      })
+
+    </script>
+  </div>
+</body>
+
+</html>
