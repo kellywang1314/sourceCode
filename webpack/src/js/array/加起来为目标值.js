@@ -5,7 +5,6 @@
  * @return int整型二维数组
  */
 function combinationSum2(num, target) {
-
     num.sort((a, b) => a - b)
     let tmpArr = []
     let res = []

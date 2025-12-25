@@ -9,11 +9,11 @@ js 类型检测方法的四种方法
 
 // 1. typeof：number/string/boolean/undefined/function/object
 
-// 2. instance: 用于判断R的原型对象是不是在L的原型链上
-function myInstance(L,R){
-    while(true){
-        if(L === null ) return false
-        if(R.prototype === L) return true
+// 2. instance: 用于判断R的原型对象是不是在L的原型链上 A instanceof B
+function myInstance(L, R) {
+    while (true) {
+        if (L === null) return false
+        if (R.prototype === L) return true
         L = L.__proto__
     }
 }

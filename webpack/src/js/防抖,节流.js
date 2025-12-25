@@ -50,7 +50,7 @@ function debunce(fn, timeout) {
 }
 
 
-function f(parm){
+function f(parm) {
     console.log(parm * 2)
 }
 
