@@ -24,14 +24,12 @@
  * @param {TreeNode} root
  * @return {number[]}
  */
-var postorderTraversal = function(root) {
+var postorderTraversal = function (root) {
     if (root === null) return [];
     let res = [];
     let stack = [root];
-    let head = null;
-
     while (stack.length) {
-        head = stack.pop();
+        let head = stack.pop();
         res.push(head.val);
 
         if (head.left !== null) {
@@ -41,53 +39,21 @@ var postorderTraversal = function(root) {
             stack.push(head.right)
         }
     }
-
     return res.reverse();
 };
 
-var root  = {
-    val: 1,
-    left: {
-        val: 2,
-        left: {
-            val: 4,
-            left: null,
-            right: null
-        },
-        right: {
-            val: 5,
-            left: null,
-            right: null
-        }
-    },
-    right: {
-        val: 3,
-        left: {
-            val: 6,
-            left: null,
-            right: null
-        },
-        right: {
-            val: 7,
-            left: null,
-            right: null
-        }
-    }
-}
-
-console.log(postorderTraversal(root));
 
 
-function pos(root){
-    if(root === null) return []
+function pos(root) {
+    if (root === null) return []
     let res = []
     let stack = [root]
-    while(stack.length){
-        if(root.right){
+    while (stack.length) {
+        if (root.right) {
             stack.push(root.right)
-        }else if(root.left){
+        } else if (root.left) {
             stack.push(root.left)
-        }else{
+        } else {
             res.push(stack.pop().val)
         }
     }

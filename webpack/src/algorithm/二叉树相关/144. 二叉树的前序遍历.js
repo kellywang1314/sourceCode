@@ -13,14 +13,12 @@
  * @param {TreeNode} root
  * @return {number[]}
  */
-var preorderTraversal = function(root) {
+var preorderTraversal = function (root) {
     if (root === null) return []
-
     let res = []
     let stack = [root]
-    let head = null
     while (stack.length) {
-        head = stack.pop()
+        let head = stack.pop()
         res.push(head.val)
         if (head.right !== null) {
             stack.push(head.right)
@@ -33,7 +31,15 @@ var preorderTraversal = function(root) {
     return res
 };
 
-const node = require('./base/nodeTree').tree4;
+/**
+ * preorderTraversalRecursive
+ * 二叉树前序遍历（递归版）：根 -> 左 -> 右
+ * @param {TreeNode} root 根节点
+ * @returns {number[]} 遍历结果
+ */
+function preorderTraversal(root) {
+    if (!root) return []
+    return [root.val, ...preorderTraversal(root.left), ...preorderTraversal(root.right)]
+};
 
-console.log(preorderTraversal(node));
 
