@@ -6,7 +6,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 module.exports = {
   entry: {
     main: path.resolve(__dirname, './src/index.js'),
-    reactApp: path.resolve(__dirname, './src/react/index.jsx')
+    reactApp: path.resolve(__dirname, './src/react/index.jsx'),
+    garfishDemo: path.resolve(__dirname, './src/grafish/test.jsx')
   },
   output: {
     filename: '[name].[hash].js',
