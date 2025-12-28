@@ -5,14 +5,18 @@
  * @param {number} target 目标和
  * @returns {[number, number] | null} 两个下标或 null
  */
-export function twoSum(nums, target) {
-    const map = new Map()
-    for (let i = 0; i < nums.length; i++) {
-        const need = target - nums[i]
-        if (map.has(need)) return [map.get(need), i]
-        map.set(nums[i], i)
+function twoSum(arr = [], target) {
+    if (arr.length < 2) return []
+    const res = []
+    const obj = {}
+    for (let i = 0; i < arr.length; i++) {
+        if (obj[target - arr[i]] !== undefined) {
+            res.push([arr[i], target - arr[i]])
+        } else {
+            obj[arr[i]] = target - arr[i]
+        }
     }
-    return null
+    return res
 }
 
 /**
