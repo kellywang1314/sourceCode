@@ -57,7 +57,7 @@ var maxDeepth = function (root) {
             stack.push(node.right)
             nextLevelCount++ // 右子节点入队
         }
-        if (currentCount === 0) { // 当前层遍历完毕
+        if (currentLevelCount === 0) { // 当前层遍历完毕
             currentLevelCount = nextLevelCount // 将下一层节点数作为新的当前层计数
             nextLevelCount = 0 // 重置下一层计数
             level++ // 层数加一

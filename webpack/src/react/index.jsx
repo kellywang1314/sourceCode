@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { createRoot } from 'react-dom/client'
+import { useStateForSelft } from './src/hooks/useState.js'
 // import GarfishDemoApp from './src/grafish/test.jsx'
 
 
@@ -11,11 +12,15 @@ const store = createCounterStore()
  * @returns {JSX.Element} 组件节点
  */
 function App() {
+  const [keyword, setKeyword] = useStateForSelft('');
+  const [count, setCount] = useStateForSelft(1);
+  const handleClick = () => setCount((pre) => pre + 1)
+  const handleChange = (e) => setKeyword(e.target.value)
   return (
     <div className="App" style={{ fontFamily: 'sans-serif', padding: 20 }}>
       <h1>React 18 本地运行</h1>
-      <CounterRedux />
-      {/* <GarfishDemoApp /> */}
+      <label>输入: <input value={keyword} onChange={handleChange} /> <span>{keyword} </span></label >
+      <div><button onClick={handleClick} > 点击: </button><span>{count}</span > </div>
     </div>
   )
 }
