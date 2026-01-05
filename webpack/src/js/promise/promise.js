@@ -158,7 +158,6 @@ new MyPromise((resolve) => {
 
 
 // MyPromise.js
-
 // 新建 MyPromise 类
 class MyPromiseNew {
   constructor(executor) {

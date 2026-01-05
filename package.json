@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Use: npm run test:memoize | npm run test:mycall | npm run test:algos\"",
     "build": "webpack --config ./webpack/webpack.config.cjs",
-    "dev": "webpack-dev-server --config ./webpack/webpack.config.cjs",
+    "dev": "webpack-dev-server --config ./webpack/webpack.config.cjs --open-page index.html",
     "dev:react": "webpack-dev-server --config ./webpack/webpack.config.cjs --open-page react.html",
     "test:memoize": "node ./tests/memoize.test.mjs",
     "test:mycall": "node ./tests/myCall.test.mjs",
@@ -40,7 +40,8 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-redux": "^9.2.0",
-    "webpack": "^4.44.1"
+    "webpack": "^4.44.1",
+    "lodash": "^4.17.21"
   },
   "devDependencies": {
     "@babel/node": "^7.14.2",

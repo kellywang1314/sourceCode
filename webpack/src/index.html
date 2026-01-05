@@ -5,6 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>前端实时测试仓库111</title>
+  <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
 </head>
 
 <body>
@@ -16,24 +17,11 @@
       <li><span>4</span></li>
     </ul>
     <script>
-      function quickSort(arr = []) {
-        const len = arr.length
-        if (len <= 1) return arr
-        let pos = Math.floor(len / 2)
-        let posvalue = arr.splice(pos, 1)[0]
-        let low = [], high = []
-        for (let i = 0; i < len; i++) {
-          if (arr[i] < posvalue) {
-            low.push(arr[i])
-          } else {
-            high.push(arr[i])
-          }
-        }
-        return [...quickSort(low), posvalue, ...quickSort(high)]
+      console.log('wa')
+      const values = {}
+      if (!values?.device_info && !values.device_info?.device_type) {
+        values.device_info.device_type = 1
       }
-
-      console.log(quickSort([1, 2, 3, -1, 5, 4]))
-
     </script>
   </div>
 </body>

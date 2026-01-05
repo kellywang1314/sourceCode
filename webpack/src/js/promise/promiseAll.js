@@ -4,23 +4,27 @@
 3、如果全部成功，状态变为 resolved，返回值将组成一个数组传给回调
 4、只要有一个失败，状态就变为 rejected，返回值将直接传递给回调all() 的返回值也是新的 Promise 对象 */
 
-function PromiseAll(promises){
-    let results = []
-    let count = 0, len = promises.length
-     // 参数判断
-     if(!Array.isArray(promises)){
-        throw new TypeError("promises must be an array")
-    }
-    return new Promise((resolve,reject) => {
-       for(let i of promises){
-           Promise.resolve(i).then((res) =>{
-                results[i] = res
-                count++
-                if(len === count){
-                    resolve(results)
-                }
-           }).catch(err => { reject({ message: err}) })
-       }
+/**
+ * PromiseAll
+ * 简化版 Promise.all：接收可迭代对象，按输入顺序收集结果；任何一个任务拒绝则整体拒绝
+ * @param {Iterable<any>} iterable 可迭代输入（数组等）
+ * @returns {Promise<any[]>} 结果数组（与输入顺序一致）
+ */
+function PromiseAll(iterable){
+    const list = Array.from(iterable)
+    const len = list.length
+    return new Promise((resolve, reject) => {
+        if (len === 0) return resolve([])
+        const results = new Array(len)
+        let count = 0
+        for (let idx = 0; idx < len; idx++) {
+            Promise.resolve(list[idx])
+                .then((val) => {
+                    results[idx] = val
+                    if (++count === len) resolve(results)
+                })
+                .catch(reject)
+        }
     })
 }
 

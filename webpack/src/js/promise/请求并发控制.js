@@ -1,80 +1,3 @@
-
-
-// 利用promise分组，每次利用promise.all执行完一组之后在执行下一组
-const requestsLimit = (list, limit, asyncHandle) => {
-  return new Promise((resolve) => {
-    let _limit = limit;
-    let recordList = []; // 记录异步操作
-    let index = 0;
-    let originListCopy = [].concat(list);
-    let asyncList = []; // 正在进行的所有并发异步操作
-    const asyncFunc = () => {
-      while (_limit--) {
-        const data = originListCopy.shift();
-        if (data) asyncList.push(asyncHandle(data, index++));
-      }
-      Promise.all(asyncList).then((response) => {
-        // 监听并记录每一次请求的结果
-        recordList = recordList.concat(response.filter((item) => item));
-        if (originListCopy.length !== 0) {
-          _limit = limit;
-          asyncList = [];
-          asyncFunc(); // 数组还未迭代完，递归继续进行迭代
-        } else {
-          // 所有并发异步操作都完成后，本次并发控制迭代完成，返回记录结果
-          resolve(recordList);
-        }
-      });
-    };
-    asyncFunc();
-  });
-};
-
-var dataLists = [1, 2, 3, 4, 5, 6, 7, 8];
-requestsLimit(dataLists, 3, (item, index) => {
-  return new Promise((resolve) => {
-    // 执行异步处理
-    setTimeout(() => {
-      // 筛选异步处理的结果
-      console.log(index);
-      if (item % 2 === 0) resolve({ item, index });
-      else resolve();
-    }, Math.random() * 5000);
-  });
-}).then((response) => {
-  console.log("finish", response);
-});
-
-// 第一种方法不太好，需要等
-//省略代码
-function limitLoad(urls, handler, limit) {
-  // 对数组做一个拷贝
-  const sequence = [...urls];
-  let promises = [];
-  //并发请求到最大数
-  promises = sequence.splice(0, limit).map((url, index) => {
-    // 这里返回的 index 是任务在 promises 的脚标，
-    //用于在 Promise.race 之后找到完成的任务脚标
-    return handler(url).then((res) => {
-      return index;
-    });
-  });
-
-  (async function loop() {
-    let p = Promise.race(promises);
-    for (let i = 0; i < sequence.length; i++) {
-      p = p.then((res) => {
-        promises[res] = handler(sequence[i]).then(() => {
-          return res;
-        });
-        return Promise.race(promises);
-      });
-    }
-  })();
-}
-limitLoad(urls, loadImg, 3);
-
-
 const urls = [
   new Promise((resolve, reject) => {
     setTimeout(() => {
@@ -90,7 +13,7 @@ const urls = [
     setTimeout(() => {
       resolve(2);
     }, 2000);
-  }),new Promise((resolve, reject) => {
+  }), new Promise((resolve, reject) => {
     setTimeout(() => {
       resolve(5);
     }, 5000);
@@ -107,56 +30,64 @@ const urls = [
   })
 ]
 
-
 // 以后就写这个了哈
+/**
+ * limitPromise
+ * 计数器 + 阻塞锁实现的并发控制：超过上限时阻塞，空位释放后继续
+ * @param {Promise<any>[]} urls 任务 Promise 列表（将被 shift 逐个执行）
+ * @param {number} [limit=3] 并发上限
+ * @returns {Promise<any[]>|void} 结果数组（按原序填写）
+ */
+/**
+ * limitPromise
+ * 并发受限执行并返回结果：保证在并发上限内依次消费 urls（Promise 列表），最终返回按原序的结果数组
+ * @param {Promise<any>[]} urls 任务 Promise 列表（将被 shift 逐个执行）
+ * @param {number} [limit=3] 并发上限
+ * @returns {Promise<any[]>} 最终结果数组（与输入顺序一致）
+ */
 function limitPromise(urls, limit = 3) {
-  // 计数器
-  let count = 0;
-  // 全局锁
-  let lock = [];
-  const l = urls.length;
-  let result = []
-  // 阻塞函数
-  function block() {
-    let _resolve;
-    return new Promise((resolve, reject) => {
-      _resolve = resolve;
-      // resolve不执行,将其推入lock数组;
-      lock.push(_resolve);
-    });
-  }
+  return new Promise((resolve, reject) => {
+    let count = 0
+    const lock = []
+    const l = urls.length
+    const result = new Array(l)
+    let done = 0
 
-  // 叫号机
-  function next() {
-    lock.length && lock.shift()()
-  }
-
-  async function bao(i) {
-    if (count >= limit) {
-      //超过限制利用await和promise进行阻塞;
-      await block();
+    // 阻塞：超过并发上限时挂起，等待 next 释放
+    function block() {
+      let _resolve
+      return new Promise((r) => { _resolve = r; lock.push(_resolve) })
     }
 
-    if (urls.length > 0) {
-      count++;
-      let res = await urls.shift()
-      result[i] = res
-      count--;
-      next();
-    }
-    if(result.length === l){
-      return result
-    }
-  }
+    // 释放一个阻塞的任务
+    function next() { lock.length && lock.shift()() }
 
-  for (let i = 0; i < l; i++) {
-    bao(i);
-  }
+    // 执行第 i 个任务，并在完成后写入结果与释放槽位
+    async function run(i) {
+      try {
+        if (count >= limit) await block()
+        if (urls.length > 0) {
+          count++
+          const res = await urls.shift()
+          result[i] = res
+          count--
+          done++
+          next()
+          if (done === l) resolve(result)
+        }
+      } catch (e) { reject(e) }
+    }
 
+    for (let i = 0; i < l; i++) run(i)
+  })
 }
 
 
-
+/**
+ * Scheduler
+ * 简易并发任务调度器：保持 `maxCount` 并发，队列任务按序入列、完成后补位
+ * 用法：new Scheduler(2).add(time, order); scheduler.taskStart();
+ */
 class Scheduler {
   constructor(limit) {
     this.queue = [];

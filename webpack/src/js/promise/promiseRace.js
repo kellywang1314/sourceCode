@@ -6,22 +6,22 @@
  * @Description: In User Settings Edit
  * @FilePath: /sourceCode/js/promise/promiseRace.js
  */
-Promise.race = function (promises) {
-    //promises 必须是一个可遍历的数据结构，否则抛错
+/**
+ * PromiseRace
+ * 简化版 Promise.race：接收可迭代对象，谁先 settle（resolve/reject）就以其结果/错误结束
+ * @param {Iterable<any>} iterable 可迭代输入（数组、Set 等）
+ * @returns {Promise<any>} 首个 settle 的结果（输入为空则永远 pending）
+ */
+function PromiseRace(iterable) {
+    if (iterable == null || typeof iterable[Symbol.iterator] !== 'function') {
+        throw new TypeError('iterable must be an iterable object')
+    }
+    const list = Array.from(iterable)
     return new Promise((resolve, reject) => {
-        if (promises.length === 0) {
-            return;
-        } else {
-            for (let i = 0; i < promises.length; i++) {
-                Promise.resolve(promises[i]).then((data) => {
-                    resolve(data);
-                    return;
-                }, (err) => {
-                    reject(err);
-                    return;
-                });
-            }
+        if (list.length === 0) return
+        for (const item of list) {
+            Promise.resolve(item).then(resolve, reject)
         }
-    });
+    })
 }
 

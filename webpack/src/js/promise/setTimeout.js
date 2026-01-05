@@ -1,20 +1,20 @@
 // 同时输出6
-for(var i=0; i<=5; i++){
-    setTimeout(function(){
+for (var i = 0; i <= 5; i++) {
+    setTimeout(function () {
         console.log(i)
-    },1000)
+    }, 1000)
 }
 
 
 // 同时输出0，1，2，3，4，5
-for(var i=0; i<=5; i++){
+for (var i = 0; i <= 5; i++) {
     (
-        function(i){
-            setTimeout(function(){
+        function (j) {
+            setTimeout(function () {
                 console.log(i)
-            },1000)
+            }, 1000)
         }
-    )(i)
+    )(j)
 }
 
 for (var i = 0; i <= 5; i++) {
@@ -30,17 +30,17 @@ function timeoutPromise(i) {
 }
 
 // 每隔一秒输出一个
-async function init () {
+async function init() {
     for (var i = 0; i < 10; i++) {
         await timeoutPromise(i);
-    }    
+    }
 }
-function timeoutPromise (i) {
+function timeoutPromise(i) {
     return new Promise((resolve) => {
         setTimeout(() => {
             console.log(i);
             resolve(true);
-        }, 1000);   
+        }, 1000);
     });
 }
 init();

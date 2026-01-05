@@ -8,16 +8,14 @@
  */
 // 基于promise实现ajax请求
 const ajaxMise = (url = '', method = 'get', data = {}, async = true, headers = {}) => {
-    var xhr = new XMLHttpRequest()
-    return new Promise(function(resolve, reject) {
+    const xhr = new XMLHttpRequest();
+    return new Promise((resolve, reject) => {
         xhr.open(method, url, async)
-        let keys = Object.keys(headers)
-        if(keys.length){
-            for(let i in keys){
-                xhr.setRequestHeader(i,headers[i])
-            }  
+        let keys = Object.keys(headers) ?? []
+        for (let i in keys) {
+            xhr.setRequestHeader(i, headers[i])
         }
-        xhr.onloadend = function() {
+        xhr.onloadend = () => {
             if ((xhr.status >= 200 && xhr.status < 300) || xhr.status === 304) {
                 resolve(xhr)
             } else

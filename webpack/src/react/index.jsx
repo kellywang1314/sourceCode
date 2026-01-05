@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { createRoot } from 'react-dom/client'
-import { useStateForSelft } from './src/hooks/useState.js'
+import { set } from 'lodash'
+// import { useStateForSelft } from './src/hooks/useState.js'
 // import GarfishDemoApp from './src/grafish/test.jsx'
 
 
@@ -16,6 +17,12 @@ function App() {
   const [count, setCount] = useStateForSelft(1);
   const handleClick = () => setCount((pre) => pre + 1)
   const handleChange = (e) => setKeyword(e.target.value)
+
+
+  const values = {}
+  if (!values.device_info?.device_type) {
+    values.device_info.device_type = isCloudPrinter ? DeviceType.CloudPrinter : DeviceType.BluetoothPrinter;
+  }
   return (
     <div className="App" style={{ fontFamily: 'sans-serif', padding: 20 }}>
       <h1>React 18 本地运行</h1>
@@ -57,7 +64,7 @@ function CounterRedux() {
 function renderApp() {
   const container = document.getElementById('react-root')
   const root = createRoot(container)
-  root.render(<Provider store={store}><App /></Provider>)
+  root.render(<App />)
 }
 
 renderApp()
