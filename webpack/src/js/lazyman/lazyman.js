@@ -1,5 +1,5 @@
-module.exports =  class __Lazyman{
-    constructor(name){
+class __Lazyman {
+    constructor(name) {
         this.name = name
         this.tasks = []
         const task = () => {
@@ -7,53 +7,53 @@ module.exports =  class __Lazyman{
             this.next()
         }
         this.tasks.push(task)
-        setTimeout(()=>{
+        setTimeout(() => {
             this.next()
-        },0) 
+        }, 0)
     }
 
-    next(){
+    next() {
         const task = this.tasks.shift()
         task && task()
     }
 
-    sleep(time){
-        this._sleep(0,time)
+    sleep(time) {
+        this._sleep(0, time)
         return this
     }
 
-    sleepFirst(time){
-        this._sleep(1,time)
+    sleepFirst(time) {
+        this._sleep(1, time)
         return this
     }
-    _sleep(isfirst,time){
-        const task = ()=>{
+    _sleep(isfirst, time) {
+        const task = () => {
             setTimeout(() => {
                 console.log(`Wake up ${time}`)
                 this.next()
-            },time*1000)
+            }, time * 1000)
         }
-        if(isfirst){
+        if (isfirst) {
             this.tasks.unshift(task)
-        }else{
+        } else {
             this.tasks.push(task)
         }
         return this
     }
 
-    eat(some){
-        const task = ()=>{
+    eat(some) {
+        const task = () => {
             console.log(`Eat ${some}`)
             this.next()
         }
         this.tasks.push(task)
         return this
     }
-    
+
 }
 function LazyMan(name) {
     return new __Lazyman(name);
 }
-  
 
+LazyMan('wallce').sleep(1).eat('breakfast').sleep(2).eat('lunch').sleepFirst(3).eat('dinner')
 

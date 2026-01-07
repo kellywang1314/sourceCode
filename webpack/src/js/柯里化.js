@@ -12,23 +12,18 @@
 * 实际应用：延迟计算；参数复用；动态创建函数
 */
 function curry(fn) {
-    //去掉curry第一个参数 该参数是后续参数传递结束的一个函数
-    let args = [...arguments].slice(1)
-    // len表示fn函数的入参数量
-    let len = fn.length
-    function __curry() {
-        args.push(...arguments)
-        if (args.length === len) {
-            return fn.apply(this, args)
-        }
-        //否则返回函数继续传参
-        return __curry
+    const len = fn.length;
+    let arg = [...arguments].slice(1)
+    if (arg.length === len) {
+        return fn.apply(null, arg)
     }
-    //判断是否一次性传完参数如果传完参数则传入参数调用需要调用的函数
-    if (args.length === len) {
-        return fn.apply(this, [...args])
-    } else {
-        return __curry
+    return function _curry() {
+        arg = [...arg, ...arguments]
+        if (arg.length === len) {
+            return fn.apply(null, arg)
+        } else {
+            return _curry
+        }
     }
 }
 function add(a, b, c, d) {
