@@ -1,7 +1,7 @@
 
  // 1. new的实现原理
 
- function myNew(){
+ function myNew(fn){
     let obj = {}
     let fn = [...arguments].slice(0,1)
     let args = [...arguments].slice(1)
@@ -26,4 +26,36 @@
  * 
  * **/
 
- 
+/**
+ * demoMyNew
+ * 功能：演示自实现 myNew 的行为，包括：
+ * 1）原型链关联（instanceof / __proto__）
+ * 2）构造函数返回对象时的覆盖规则
+ * 3）this 绑定与参数传递
+ * @returns {void}
+ */
+function demoMyNew() {
+  // 构造函数：设置属性与原型方法
+  function Person(name) { this.name = name; this.tag = 'P' }
+  Person.prototype.say = function () { return 'Hello ' + this.name }
+
+  // 使用自定义 myNew 创建实例
+  const person = myNew(Person, 'Jack')
+  console.log('person name:', person.name)
+  console.log('person say:', person.say())
+  console.log('instanceof(Person):', person instanceof Person)
+  console.log('__proto__ === Person.prototype:', Object.getPrototypeOf(person) === Person.prototype)
+
+  // 构造函数返回一个对象：遵循“返回对象优先”规则
+  function ReturnsObj(name) { this.name = name; return { name: 'Override', flag: true } }
+  const resObj = myNew(ReturnsObj, 'Rose')
+  console.log('returns object case:', resObj.name, resObj.flag)
+
+  // 参数传递与 this 绑定示例
+  function Adder(a, b) { this.sum = a + b }
+  const adder = myNew(Adder, 2, 3)
+  console.log('adder sum:', adder.sum)
+}
+
+// 运行测试示例
+demoMyNew()

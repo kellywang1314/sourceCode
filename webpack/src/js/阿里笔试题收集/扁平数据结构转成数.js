@@ -74,31 +74,25 @@ function change(data = [], pid) {
  * @param {Array<{id:number,name:string,pid:number}>} items 扁平数据
  * @returns {Array} 树结构数组（森林），根为 pid===0 的节点
  */
-function arrayToTree(items) {
-  const result = [];   // 存放结果集
-  const itemMap = {};  // 
-
-  // 先转成map存储
-  for (const item of items) {
-    itemMap[item.id] = { ...item, children: [] }
+function arrayToTree(list = [], rootPid = 0) {
+  const map = new Map()
+  const res = []
+  for (let i of list) {
+    map.set(i.id, { ...i, children: [] })
   }
-
-  for (const item of items) {
-    const id = item.id;
-    const pid = item.pid;
-    const treeItem = itemMap[id];
-    if (pid === 0) {
-      result.push(treeItem);
+  for (let item of list) {
+    const id = item.id
+    const pid = item.pid
+    const node = map.get(id) // 用id匹配节点
+    if (pid === 0 || !map.has(pid)) {
+      res.push(node)
     } else {
-      // if (!itemMap[pid]) {
-      //   itemMap[pid] = {
-      //     children: [],
-      //   }
-      // }
-      itemMap[pid].children.push(treeItem)
+      const parent = map.get(pid)
+      parent.children.push(node)
     }
   }
-  return result;
+  return res
+
 }
 
 /**

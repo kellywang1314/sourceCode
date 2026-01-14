@@ -20,3 +20,14 @@ Promise.prototype.finally = function (callback) {
     )
 }
 
+// finally 成功或者失败都会执行
+export function promiseFinally(promise, onFinally) {
+    // 回调包装成一个 Promise，确保异步执行
+    const handler = () => Promise.resolve(onFinally());
+    return promise.then(
+        (val) => handler().then(() => val),
+        (err) => handler().then(() => { throw err; })
+    );
+}
+
+

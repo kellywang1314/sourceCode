@@ -87,13 +87,9 @@ Function.prototype.myBind = function (context, ...args) {
     const thisArg = isNewCall ? this : context
     return target.apply(thisArg, [...args, ...innerArgs])
   }
-  if (target.prototype) {
-    boundFn.prototype = Object.create(target.prototype, {
-      constructor: { value: boundFn, writable: true, configurable: true }
-    })
-  }
   return boundFn
 };
+
 
 
 /**
