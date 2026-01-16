@@ -31,39 +31,24 @@ let res = [
   }
 ]
 
-
-/**
- * getChildren
- * 递归收集某个 pid 的所有子节点，并为每个子节点继续收集其子孙
- * @param {Array<{id:number,name:string,pid:number}>} data 扁平数据
- * @param {Array} result 收集结果的 children 数组引用
- * @param {number} pid 当前父节点 id（根一般为 0）
- * @returns {void}
- */
-const getChildren = (data, result, pid) => {
-  for (let item of data) {
-    if (item.pid === pid) {
-      // newItem是找到的一个存在子节点的父节点
-      const newItem = { ...item, children: [] }
-      result.push(newItem)
-      // 继续为newItem.children收集子节点
-      getChildren(data, newItem.children, item.id)
-    }
-  }
-}
-
 /**
  * change
- * 基础递归版：根据给定根 pid，将扁平数组转换为树结构
- * - 时间复杂度 O(n^2)（最坏情况下，每层都线性扫描）
+ * 直接递归版：从指定 pid 开始构建树，当前层收集所有子节点并为每个子节点递归构建 children。
+ * 思路：先找出当前父 pid 的所有子项，为每个子项递归生成其 children，最终返回当前层的 children 数组。
  * @param {Array<{id:number,name:string,pid:number}>} data 扁平数据
- * @param {number} pid 根节点的 pid（常用 0）
- * @returns {Array} 树结构数组（森林）
+ * @param {number} pid 当前层的父 id（根通常为 0）
+ * @returns {Array} 当前层的 children 数组
+ * 复杂度：最坏 O(n^2)，每层线性扫描查找子节点；可用 Map 优化为 O(n)（见 arrayToTree）。
  */
 function change(data = [], pid) {
-  const res = []
-  getChildren(data, res, pid)
-  return res
+  const children = []
+  for (const item of data) {
+    if (item.pid === pid) {
+      const node = { ...item, children: change(data, item.id) }
+      children.push(node)
+    }
+  }
+  return children
 }
 
 /**

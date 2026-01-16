@@ -20,19 +20,20 @@ function flat(arr = []) {
 }
 
 // 迭代
-function flatten(arr) {
-    let temp = [...arr]
-    let res = []
-    while (temp.length) {
-        let item = temp.shift()
+function flattenArrStack(arr) {
+    const stack = [...arr];
+    const result = [];
+    while (stack.length) {
+        const item = stack.pop(); // 从 栈 尾 取 元 素，
         if (Array.isArray(item)) {
-            temp.unshift(...item)
+            stack.push(...item); // 子数组 元 素入 栈
         } else {
-            res.push(item)
+            result.unshift(item); // 保持 原 顺 序
         }
     }
-    return res
+    return result;
 }
+
 
 
 // 递归reduce
@@ -53,5 +54,74 @@ let arr_flat = arr.toString().split(',').map((val) => {
 
 // 正则匹配
 JSON.stringify([1, [2, 3], [4, [5, 6]]]).replace(/\[|\]/g, '')
+
+/**
+ * flattenDepthRecursive
+ * 函数功能：按指定深度扁平化数组（递归版）
+ * @param {any[]} arr 输入数组
+ * @param {number} depth 扁平化深度（默认 1；<=0 表示不扁平）
+ * @returns {any[]} 扁平化后的新数组
+ */
+function flattenDepthRecursive(arr = [], depth = 1) {
+    if (depth <= 0) return arr.slice();
+    const res = [];
+    for (const item of arr) {
+        if (Array.isArray(item)) {
+            res.push(...flattenDepthRecursive(item, depth - 1));
+        } else {
+            res.push(item);
+        }
+    }
+    return res;
+}
+
+/**
+ * flattenDepthIterative
+ * 函数功能：按指定深度扁平化数组（迭代版，一次一层）
+ * @param {any[]} arr 输入数组
+ * @param {number} depth 扁平化深度
+ * @returns {any[]} 扁平化后的新数组
+ */
+function flattenDepthIterative(arr = [], depth = 1) {
+    let res = arr.slice();
+    const flattenOneLevel = (a) => a.reduce((acc, cur) => acc.concat(cur), []);
+    for (let i = 0; i < depth; i++) {
+        if (!res.some(Array.isArray)) break;
+        res = flattenOneLevel(res);
+    }
+    return res;
+}
+
+// 示例
+// const sample = [1, [2, 3], [4, [5, 6]]];
+// console.log(flattenDepthRecursive(sample, 1)); // [1,2,3,4,[5,6]]
+// console.log(flattenDepthRecursive(sample, 2)); // [1,2,3,4,5,6]
+// console.log(flattenDepthIterative(sample, 2)); // [1,2,3,4,5,6]
+
+/**
+ * flattenDepthRecursive
+ * 函数功能：按指定深度扁平化数组（递归版）
+ * @param {any[]} arr 输入数组
+ * @param {number} depth 扁平化深度（默认 1；<=0 表示不扁平）
+ * @returns {any[]} 扁平化后的新数组
+ */
+function flattenDepthRecursive(arr = [], depth = 1) {
+    if (depth <= 0) return arr.slice();
+    const res = [];
+    for (const item of arr) {
+        if (Array.isArray(item)) {
+            res.push(...flattenDepthRecursive(item, depth - 1));
+        } else {
+            res.push(item);
+        }
+    }
+    return res;
+}
+
+// 示例
+// const sample = [1, [2, 3], [4, [5, 6]]];
+// console.log(flattenDepthRecursive(sample, 1)); // [1,2,3,4,[5,6]]
+// console.log(flattenDepthRecursive(sample, 2)); // [1,2,3,4,5,6]
+// console.log(flattenDepthIterative(sample, 2)); // [1,2,3,4,5,6]
 
 
