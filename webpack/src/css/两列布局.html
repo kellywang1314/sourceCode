@@ -6,36 +6,113 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
-        /* 3种方式：1.flex布局；2.定宽div增加float；3.定宽postion设置为absolute,自适应margin-left：定宽 */
-        .contain {
-            /* display: flex; */
+        /* 常考两列布局：Flex / Float+BFC / Absolute+margin / Grid */
+        .demo-flex,
+        .demo-float,
+        .demo-abs,
+        .demo-grid {
+            margin-bottom: 16px;
         }
 
+        /* 基础视觉样式 */
         .left {
-            width: 100px;
-            /* float:left; */
-            position: absolute;
-            height: 100px;
             background-color: red;
+            padding: 12px;
+            box-sizing: border-box;
             white-space: normal;
             word-break: break-all;
             overflow-wrap: break-word;
         }
 
         .right {
-            /* flex:1; */
-            height: 100px;
-            margin-left: 100px;
             background-color: green;
+            padding: 12px;
+            box-sizing: border-box;
+            min-width: 0;
+            /* 避免长内容撑破（Flex/Grid生效）*/
+            overflow: auto;
+        }
+
+        /* 1) Flex：左固定，右自适应 */
+        .demo-flex {
+            display: flex;
+            gap: 16px;
+        }
+
+        .demo-flex .left {
+            /* 固定左列宽度：flex: grow shrink basis => 不增长(0)、不收缩(0)、基础宽度 240px */
+            flex: 0 0 240px;
+        }
+
+        .demo-flex .right {
+            /* 右列自适应：flex: grow shrink basis => 可增长(1)、可收缩(1)、基础宽度 auto（依据内容/可用空间） */
+            flex: 1 1 auto;
+        }
+
+        /* 2) Float+BFC：左浮动固定宽度，右侧 overflow 触发 BFC 占剩余宽度 */
+        .demo-float {
+            display: flow-root;
+            /* 父容器形成BFC，容器高度不塌陷 */
+            /* 或 overflow: auto; */
+        }
+
+        .demo-float .left {
+            float: left;
+            width: 240px;
+        }
+
+        .demo-float .right {
             overflow: hidden;
+        }
+
+        /* 3) Absolute + margin：左绝对定位固定宽度，右通过 margin-left 避让 */
+        .demo-abs {
+            position: relative;
+        }
+
+        .demo-abs .left {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 240px;
+        }
+
+        .demo-abs .right {
+            margin-left: 240px;
+        }
+
+        /* 4) Grid：网格两列（固定 + 自适应）*/
+        .demo-grid {
+            display: grid;
+            gap: 16px;
+            grid-template-columns: 240px 1fr;
         }
     </style>
 </head>
 
 <body>
-    <div class='contain'>
-        <div class='left'>left11111111111111111111</div>
-        <div class='right'>right</div>
+    <!-- 1) Flex 两列布局：左固定，右自适应 -->
+    <div class="demo-flex">
+        <div class="left">Flex 左列（固定 240px）</div>
+        <div class="right">Flex 右列（自适应）</div>
+    </div>
+
+    <!-- 2) Float+BFC 两列布局：左浮动，右 BFC 占剩余宽度 -->
+    <div class="demo-float">
+        <div class="left">Float 左列（固定 240px）</div>
+        <div class="right">Float 右列（自适应）</div>
+    </div>
+
+    <!-- 3) Absolute + margin 两列布局：左绝对定位，右 margin-left -->
+    <div class="demo-abs">
+        <div class="left">Absolute 左列（固定 240px）</div>
+        <div class="right">Absolute 右列（自适应）</div>
+    </div>
+
+    <!-- 4) Grid 两列布局：网格固定 + 自适应 -->
+    <div class="demo-grid">
+        <div class="left">Grid 左列（固定 240px）</div>
+        <div class="right">Grid 右列（自适应）</div>
     </div>
 </body>
 

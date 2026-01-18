@@ -124,4 +124,31 @@ function flattenDepthRecursive(arr = [], depth = 1) {
 // console.log(flattenDepthRecursive(sample, 2)); // [1,2,3,4,5,6]
 // console.log(flattenDepthIterative(sample, 2)); // [1,2,3,4,5,6]
 
-
+/**
+ * Flat1
+ * 函数功能：按指定深度扁平化数组（迭代版，显式栈维护每个元素的剩余深度）
+ * 思路：栈元素为 [item, depthLeft]；遇到数组且 depthLeft>0 时展开其子元素并将 depthLeft-1；
+ *       其他情况直接输出，保证与原数组顺序一致。
+ * @param {any[]} arr 输入数组
+ * @param {number} depth 扁平化深度（默认 1；<=0 表示不扁平）
+ * @returns {any[]} 扁平化后的新数组
+ */
+function Flat1(arr = [], depth = 1) {
+    if (depth <= 0) return arr.slice();
+    const result = [];
+    const stack = [];
+    for (let i = arr.length - 1; i >= 0; i--) {
+        stack.push([arr[i], depth]);
+    }
+    while (stack.length) {
+        const [item, d] = stack.pop();
+        if (Array.isArray(item) && d > 0) {
+            for (let i = item.length - 1; i >= 0; i--) {
+                stack.push([item[i], d - 1]);
+            }
+        } else {
+            result.push(item);
+        }
+    }
+    return result;
+}

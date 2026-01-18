@@ -1,138 +1,202 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
-        /* 1. flex布局
-        .contain{
+        /* 三列布局常考：Flex / Float+BFC / Absolute+margin / 圣杯 / 双飞翼 / Grid */
+        .demo {
+            margin-bottom: 16px;
+        }
+
+        /* 统一视觉样式 */
+        .left {
+            background-color: #f66;
+            padding: 12px;
+            box-sizing: border-box;
+        }
+
+        .middle {
+            background-color: #ccc;
+            padding: 12px;
+            box-sizing: border-box;
+            min-width: 0;
+        }
+
+        .right {
+            background-color: #6c6;
+            padding: 12px;
+            box-sizing: border-box;
+        }
+
+        /* 1) Flex：左右固定，中间自适应 */
+        .demo-flex {
             display: flex;
+            gap: 16px;
         }
-        .left{
-           width:100px;
-           height:100px;
-           background-color:red
-        }
-        .middle{
-            flex:1;
-            height:100px;
-            background-color:gray
-        }
-            
-        .right{
-            width:100px;
-            height:100px;
-            background-color:green
-        } */
 
-        /* 2. position布局
-        .contain{
-            position: relative;
+        .demo-flex .left {
+            flex: 0 0 240px;
         }
-        .left{
-           position: absolute;
-           width:100px;
-           height:100px;
-           background-color:red
-        }
-        .middle{
-            position: absolute;
-            left:100px;
-            right:100px;
-            height:100px;
-            background-color:gray
-        }
-            
-        .right{
-            position: absolute;
-            right:0px;
-            width:100px;
-            height:100px;
-            background-color:green
-        } */
 
-        /* 3. 双飞翼布局：优势是主要内容会先加载
-        .contain{
-           float: left;
-           width: 100%;
+        .demo-flex .middle {
+            flex: 1 1 auto;
         }
-        .middle{
-           margin-left: 100px;
-           margin-right: 200px;
-           height:100px;
-           background-color:gray
-       }
-           
-        .left{
-           float: left;
-           margin-left: -100%;
-           width:100px;
-           height:100px;
-           background-color:red
-        }
-        
-        .right{
-            float: right;
-            margin-left: -200px;
-            width:200px;
-            height:100px;
-            background-color:green
-        } */
 
+        .demo-flex .right {
+            flex: 0 0 240px;
+        }
 
-        /* 4. 圣杯布局（不好理解）：优势也是主要内容会先加载，比双飞翼html结构简单 */
-        .contain{
-           margin-left: 100px;
-           margin-right: 200px;
+        /* 2) Float+BFC：左右浮动固定，中间 overflow 形成 BFC 占剩余宽度 */
+        .demo-floatBfc {
+            display: flow-root;
         }
-        .middle{
-           float: left;
-           width: 100%;
-           height:100px;
-           background-color:gray
-       }
-           
-        .left{
-           float: left;
-           margin-left: -100%;
-           position: relative;
-           left:-100px;
-           width:100px;
-           height:100px;
-           background-color:red
-        }
-        
-        .right{
+
+        .demo-floatBfc .left {
             float: left;
-            margin-left: -200px;
+            width: 240px;
+        }
+
+        .demo-floatBfc .right {
+            float: right;
+            width: 240px;
+        }
+
+        .demo-floatBfc .middle {
+            overflow: hidden;
+        }
+
+        /* 3) Absolute + margin：左右绝对定位固定，中间用 margin 避让 */
+        .demo-abs {
             position: relative;
-            right: -200px;
-            width:200px;
-            height:100px;
-            background-color:green
+        }
+
+        .demo-abs .left {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 240px;
+        }
+
+        .demo-abs .right {
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 240px;
+        }
+
+        .demo-abs .middle {
+            margin: 0 240px;
+        }
+
+        /* 4) 圣杯布局：中间 100% 浮动，左右负边距+相对定位偏移 */
+        /* 保证“主内容先加载、先呈现”：HTML 源码中主列写在最前，左右侧栏通过负边距+相对定位偏移到两侧，利于可访问性与搜索引擎抓取。 */
+        .demo-holy {
+            margin-left: 240px;
+            margin-right: 240px;
+            display: flow-root;
+        }
+
+        .demo-holy .middle {
+            float: left;
+            width: 100%;
+        }
+
+        .demo-holy .left {
+            float: left;
+            margin-left: -100%;
+            position: relative;
+            left: -240px;
+            width: 240px;
+        }
+
+        .demo-holy .right {
+            float: left;
+            margin-left: -240px;
+            position: relative;
+            right: -240px;
+            width: 240px;
+        }
+
+        /* 5) 双飞翼布局：中间优先加载，内部内容区左右留白 */
+        .demo-double .middle {
+            float: left;
+            width: 100%;
+            display: flow-root;
+        }
+
+        .demo-double .middle .inner {
+            margin: 0 240px;
+        }
+
+        .demo-double .left {
+            float: left;
+            margin-left: -100%;
+            width: 240px;
+        }
+
+        .demo-double .right {
+            float: left;
+            margin-left: -240px;
+            width: 240px;
         }
 
 
+        /* 6) Grid：明确列模板（固定 + 自适应 + 固定）*/
+        .demo-grid {
+            display: grid;
+            grid-template-columns: 240px 1fr 240px;
+            gap: 16px;
+        }
     </style>
 </head>
+
 <body>
-    <!-- <div class='contain'>
-        <div class='left'>left</div>
-        <div class='middle'>middle</div>
-        <div class='right'>right</div>
-    </div> -->
-
-    <!-- <div class="contain">
-        <div class="middle">middle</div>
+    <!-- 1) Flex 三列布局：左右固定，中间自适应 -->
+    <div class="demo demo-flex">
+        <div class="left">Flex 左列（240px）</div>
+        <div class="middle">Flex 中列（自适应）</div>
+        <div class="right">Flex 右列（240px）</div>
     </div>
-    <div class="left">left</div>
-    <div class="right">right</div> -->
 
-    <div class='contain'>
-        <div class='middle'>middle</div>
-        <div class='left'>left</div>
-        <div class='right'>right</div>
+    <!-- 2) Float+BFC 三列布局：左右浮动固定，中间 BFC 占剩余宽度 -->
+    <div class="demo demo-floatBfc">
+        <div class="left">Float 左列（240px）</div>
+        <div class="middle">Float 中列（BFC）</div>
+        <div class="right">Float 右列（240px）</div>
+    </div>
+
+    <!-- 3) Absolute + margin 三列布局：左右绝对定位，中间 margin 避让 -->
+    <div class="demo demo-abs">
+        <div class="left">Absolute 左列（240px）</div>
+        <div class="middle">Absolute 中列（margin: 0 240px）</div>
+        <div class="right">Absolute 右列（240px）</div>
+    </div>
+
+    <!-- 4) 圣杯布局：中间 100% 浮动，左右负边距 + 相对定位偏移 -->
+    <div class="demo demo-holy">
+        <div class="middle">圣杯 中列（100%）</div>
+        <div class="left">圣杯 左列（240px）</div>
+        <div class="right">圣杯 右列（240px）</div>
+    </div>
+
+    <!-- 5) 双飞翼布局：中间优先加载，内部内容区左右留白 -->
+    <div class="demo demo-double">
+        <div class="middle">
+            <div class="inner">双飞翼 中列（inner: margin 0 240px）</div>
+        </div>
+        <div class="left">双飞翼 左列（240px）</div>
+        <div class="right">双飞翼 右列（240px）</div>
+    </div>
+
+    <!-- 6) Grid 三列布局：网格固定 + 自适应 + 固定 -->
+    <div class="demo demo-grid">
+        <div class="left">Grid 左列（240px）</div>
+        <div class="middle">Grid 中列（自适应）</div>
+        <div class="right">Grid 右列（240px）</div>
     </div>
 </body>
+
 </html>

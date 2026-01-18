@@ -13,72 +13,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <style>
-        /* 1. felx布局(不需要知道居住元素宽高)
-        .parent{
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 200px;
-            height: 300px;
-            background-color: indigo;
-        }
-        .child{
-            background-color: greenyellow;
-        } */
+        /* 常用水平垂直居中方案：Flex / Grid / 绝对定位+transform / 绝对定位+负margin / 绝对定位+margin:auto / table-cell / line-height */
+        .wrap { display: grid; gap: 16px; padding: 16px; }
+        .demo { background: #f6f7f9; height: 180px; border-radius: 12px; position: relative; }
+        .label { position: absolute; top: 8px; left: 12px; font-size: 13px; color: #555; }
+        .box { width: 100px; height: 60px; background: #48c; color: #fff; display: flex; align-items: center; justify-content: center; border-radius: 8px; }
 
-        /* 2. postion布局(transform)(不需要知道居住元素宽高)
-        .parent{
-            position: relative;
-            width: 300px;
-            height: 300px;
-            background-color: indigo;
-        }
-        .child{
-            position: absolute;
-            left:50%;
-            top: 50%;
-            transform: translate(-50%,-50%);
-            background-color: greenyellow;
-        }
-        */
+        /* 1) Flex 居中（不依赖子元素尺寸）*/
+        .demo-flex { display: flex; justify-content: center; align-items: center; }
 
-        /* 3. table-cell布局（不需要知道居住元素宽高）
-        .parent{
-            display: table-cell;
-            vertical-align: middle;
-            text-align: center;
-            width: 300px;
-            height: 300px;
-            background-color: indigo;
-        }
-        .child{
-            background-color: greenyellow;
-        } */
+        /* 2) Grid 居中（现代浏览器，语义清晰）*/
+        .demo-grid { display: grid; place-items: center; }
 
+        /* 3) 绝对定位 + transform（不依赖子元素尺寸）*/
+        .demo-abs-transform { position: relative; }
+        .demo-abs-transform .box { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); }
 
-        /* 4.postion布局+margin（需要知道居住元素宽高） */
-        .parent{
-            position: relative;
-            width: 300px;
-            height: 300px;
-            background-color: indigo;
-        }
-        .child{
-            width: 100px;
-            height: 100px;
-            position: absolute;
-            left: 50%;
-            top: 50%;
-            margin: -50px 0 0 -50px;
-            background-color: greenyellow;
-        }
+        /* 4) 绝对定位 + 负 margin（需知道子元素尺寸）*/
+        .demo-abs-margin { position: relative; }
+        .demo-abs-margin .box { position: absolute; left: 50%; top: 50%; width: 100px; height: 60px; margin: -30px 0 0 -50px; }
 
-         
+        /* 5) 绝对定位 + margin:auto（需知道子元素尺寸）*/
+        .demo-abs-auto { position: relative; }
+        .demo-abs-auto .box { position: absolute; width: 100px; height: 60px; top: 0; right: 0; bottom: 0; left: 0; margin: auto; }
+
+        /* 6) table-cell 垂直居中（不依赖子元素尺寸，适合文本/inline）*/
+        .demo-table { display: table-cell; vertical-align: middle; text-align: center; width: 100%; }
+
+        /* 7) 单行文本居中：line-height = 容器高度 */
+        .demo-line-height { line-height: 180px; text-align: center; }
+        .demo-line-height .box { display: inline-block; line-height: normal; }
     </style>
 </head>
 <body>
-    <div class='parent'>
-        <div class='child'>居中</div>
-    <div>
+    <div class="wrap">
+      <div class="demo demo-flex"><span class="label">Flex 居中</span><div class="box">居中</div></div>
+      <div class="demo demo-grid"><span class="label">Grid 居中</span><div class="box">居中</div></div>
+      <div class="demo demo-abs-transform"><span class="label">绝对定位 + transform</span><div class="box">居中</div></div>
+      <div class="demo demo-abs-margin"><span class="label">绝对定位 + 负 margin</span><div class="box">居中</div></div>
+      <div class="demo demo-abs-auto"><span class="label">绝对定位 + margin:auto</span><div class="box">居中</div></div>
+      <div class="demo demo-table"><span class="label">table-cell 垂直居中</span><div class="box">居中</div></div>
+      <div class="demo demo-line-height"><span class="label">单行文本 line-height 居中</span><div class="box">居中</div></div>
+    </div>
 </body>
 </html>

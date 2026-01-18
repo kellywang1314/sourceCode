@@ -17,35 +17,63 @@ window.scroll获取scrollTop数据
 拖拽一个元素时，要随时拿到该元素被拖拽的位置
 */
 
-// 节流
-function throttle(fn, timeout){
+/**
+ * throttle
+ * 函数功能：节流，支持立即执行（leading）。
+ * - immediate=true：首次触发立即执行，等待窗口内忽略；
+ * - immediate=false：在窗口结束时以“最后一次参数”执行（trailing）。
+ * @param {Function} fn 目标函数
+ * @param {number} wait 间隔毫秒
+ * @param {boolean} [immediate=false] 是否立即执行
+ * @returns {Function} 包装后的函数
+ */
+function throttle(fn, wait, immediate = false) {
     let timer = null
-    return function (){
-        let args = [...arguments]
-        let that = this
-        if(!timer){
-        timer = setTimeout(()=> {
-            fn.apply(that,args)
-            timer = null
-        },timeout)
+    // let lastArgs = null
+    let lastThis = null
+    return function (...args) {
+        // lastArgs = args
+        lastThis = this
+        if (!timer) {
+            if (immediate) {
+                fn.apply(lastThis, args)
+            }
+            timer = setTimeout(() => {
+                if (!immediate) {
+                    fn.apply(lastThis, args)
+                }
+                timer = null
+                // lastArgs = null
+                lastThis = null
+            }, wait)
+        }
     }
-    }
-    
 }
 
-// 防抖
-function debunce(fn, timeout) {
+/**
+ * debounce
+ * 函数功能：防抖，支持立即执行（leading）。
+ * - immediate=true：首次触发立即执行，窗口内后续调用忽略；
+ * - immediate=false：仅在停止触发 wait 毫秒后执行（trailing）。
+ * @param {Function} fn 目标函数
+ * @param {number} wait 等待毫秒
+ * @param {boolean} [immediate=false] 是否立即执行
+ * @returns {Function} 包装后的函数
+ */
+function debounce(fn, wait, immediate = false) {
     let timer = null
-    return function () {
-        let args = [...arguments]
-        let that = this
-        if(timer){
-            clearTimeout(timer)
-        }else{
-            timer = setTimeout(() => {
-                fn.apply(that,args)
-            },timeout)
+    return function (...args) {
+        const that = this
+        if (timer) clearTimeout(timer)
+        if (immediate && !timer) {
+            fn.apply(that, args)
         }
+        timer = setTimeout(() => {
+            if (!immediate) {
+                fn.apply(that, args)
+            }
+            timer = null
+        }, wait)
     }
 }
 
@@ -54,4 +82,4 @@ function f(parm) {
     console.log(parm * 2)
 }
 
-window.addEventListener('resize', this.debunce(() =>f(1),1000))
+window.addEventListener('resize', debounce(() => f(1), 1000, true))

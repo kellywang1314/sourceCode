@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>CSS 三角形常用实现</title>
+    <style>
+        :root {
+            --size: 80px;
+            /* 三角形基准尺寸 */
+            --color-primary: #f66;
+            --color-secondary: #4bd;
+            --gap: 16px;
+        }
+
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+        }
+
+        .wrap {
+            padding: var(--gap);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: var(--gap);
+        }
+
+        .card {
+            background: #f6f7f9;
+            border-radius: 12px;
+            padding: var(--gap);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            min-height: 160px;
+        }
+
+        .label {
+            margin-top: 10px;
+            color: #555;
+            font-size: 14px;
+        }
+
+        /* 1) 边框法（最常见、兼容性极好）——通过 0x0 盒子的边框制造三角形 */
+        .tri-border-up {
+            width: 0;
+            height: 0;
+            border-left: calc(var(--size) / 2) solid transparent;
+            border-right: calc(var(--size) / 2) solid transparent;
+            border-bottom: var(--size) solid var(--color-primary);
+            /* 向上指的三角形，底边着色 */
+        }
+
+        .tri-border-right {
+            width: 0;
+            height: 0;
+            border-top: calc(var(--size) / 2) solid transparent;
+            border-bottom: calc(var(--size) / 2) solid transparent;
+            border-left: var(--size) solid var(--color-secondary);
+            /* 向右指，左边着色 */
+        }
+
+        .tri-border-down {
+            width: 0;
+            height: 0;
+            border-left: calc(var(--size) / 2) solid transparent;
+            border-right: calc(var(--size) / 2) solid transparent;
+            border-top: var(--size) solid var(--color-secondary);
+            /* 向下指，顶边着色 */
+        }
+
+        .tri-border-left {
+            width: 0;
+            height: 0;
+            border-top: calc(var(--size) / 2) solid transparent;
+            border-bottom: calc(var(--size) / 2) solid transparent;
+            border-right: var(--size) solid var(--color-primary);
+            /* 向左指，右边着色 */
+        }
+
+        /* 2) clip-path 多边形裁剪（语义清晰，可做等边三角形与响应式比例） */
+        .tri-clip {
+            width: var(--size);
+            height: var(--size);
+            background: var(--color-primary);
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            /* 顶点在上，中下两点在底边，两腰相等 */
+        }
+
+        .tri-clip-eq {
+            /* 等边三角形：宽=size，高≈size*√3/2 */
+            width: var(--size);
+            height: calc(var(--size) * 0.866);
+            /* √3/2 ≈ 0.866 */
+            background: var(--color-secondary);
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+        }
+
+        /* 3) 伪元素法（常用于气泡/提示框的小箭头） */
+        .tooltip {
+            position: relative;
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 14px 18px;
+            color: #333;
+        }
+
+        .tooltip::after {
+            content: "";
+            position: absolute;
+            left: 24px;
+            bottom: -12px;
+            /* 箭头位置与父盒子相对定位 */
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-top: 12px solid #ddd;
+            /* 外层箭头边框 */
+        }
+
+        .tooltip::before {
+            content: "";
+            position: absolute;
+            left: 24px;
+            bottom: -10px;
+            width: 0;
+            height: 0;
+            border-left: 7px solid transparent;
+            border-right: 7px solid transparent;
+            border-top: 11px solid #fff;
+            /* 内层箭头填充，与气泡背景一致 */
+        }
+
+        /* 4) 渐变法（无需边框/裁剪，通过渐变制造斜边） */
+        .tri-gradient {
+            width: var(--size);
+            height: var(--size);
+            background: linear-gradient(135deg, var(--color-primary) 50%, transparent 50%);
+            /* 组成右上角的直角三角形，可通过旋转 transform 改方向 */
+            transform: rotate(0deg);
+        }
+
+        /* 5) 响应式等高三角形：利用 aspect-ratio 与 clip-path */
+        .tri-responsive {
+            width: 100%;
+            max-width: 180px;
+            aspect-ratio: 1 / 1;
+            /* 正方形比例盒子 */
+            background: var(--color-secondary);
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            /* 自适应缩放的等腰三角形 */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrap">
+        <div class="grid">
+            <div class="card">
+                <div class="tri-border-up"></div>
+                <div class="label">边框法：向上三角形</div>
+            </div>
+            <div class="card">
+                <div class="tri-border-right"></div>
+                <div class="label">边框法：向右三角形</div>
+            </div>
+            <div class="card">
+                <div class="tri-border-down"></div>
+                <div class="label">边框法：向下三角形</div>
+            </div>
+            <div class="card">
+                <div class="tri-border-left"></div>
+                <div class="label">边框法：向左三角形</div>
+            </div>
+
+            <div class="card">
+                <div class="tri-clip"></div>
+                <div class="label">clip-path：等腰三角形</div>
+            </div>
+            <div class="card">
+                <div class="tri-clip-eq"></div>
+                <div class="label">clip-path：等边三角形</div>
+            </div>
+
+            <div class="card">
+                <div class="tooltip">提示气泡（伪元素箭头）</div>
+                <div class="label">伪元素法：常用于气泡/弹窗箭头</div>
+            </div>
+
+            <div class="card">
+                <div class="tri-gradient"></div>
+                <div class="label">渐变法：直角三角形（可 transform 旋转）</div>
+            </div>
+
+            <div class="card">
+                <div class="tri-responsive"></div>
+                <div class="label">响应式：等腰三角形（aspect-ratio + clip-path）</div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

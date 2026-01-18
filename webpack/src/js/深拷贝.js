@@ -18,27 +18,27 @@ function copy(obj) {
 // 还会丢失原型上的属性
 /**
  * deepClone
- * 递归深拷贝对象/数组，处理循环引用
+ * 递归深拷贝对象/数组，处理循环引用，并支持常见内置类型（Date/RegExp）。
  * @param {any} source 源数据
  * @param {WeakMap<any, any>} cache 引用缓存
  * @returns {any} 拷贝结果
  */
 function deepClone(source, cache = new WeakMap()) {
     if (source === null || typeof source !== 'object') return source
+    // Date
+    if (source instanceof Date) return new Date(source.getTime())
+    // RegExp（保留正则表达式的源与标志，并复制 lastIndex）
+    if (source instanceof RegExp) {
+        const re = new RegExp(source.source, source.flags)
+        re.lastIndex = source.lastIndex
+        return re
+    }
     if (cache.has(source)) return cache.get(source)
     const target = Array.isArray(source) ? [] : {}
     cache.set(source, target)
-    // for (const key in source) {
-    //     if (Object.prototype.hasOwnProperty.call(source, key)) {
-    //         target[key] = deepClone(source[key], cache)
-    //     }
-    // }
     for (let i in source) {
-        if (typeof source[i] === 'object') {
-            target[i] = deepClone(source[i], cache)
-        } else {
-            target[i] = source[i]
-        }
+        const val = source[i]
+        target[i] = (val !== null && typeof val === 'object') ? deepClone(val, cache) : val
     }
     return target
 }
