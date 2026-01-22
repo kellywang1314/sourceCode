@@ -27,7 +27,7 @@
  * @param {TreeNode} root
  * @return {boolean}
  */
-var isSymmetric = function(root) {
+var isSymmetric = function (root) {
     if (root === null) return true;
     let same = true;
     isSame(root.left, root.right);
@@ -51,7 +51,7 @@ var isSymmetric = function(root) {
  * @param {TreeNode} root
  * @return {boolean}
  */
-var isSymmetric = function(root) {
+var isSymmetric = function (root) {
     if (root === null) return true;
     let s1 = [];
     let s2 = [];
