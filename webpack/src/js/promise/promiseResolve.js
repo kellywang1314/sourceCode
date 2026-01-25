@@ -20,9 +20,12 @@ function PromiseResolve(param) {
     return new Promise((resolve, reject) => {
         const then = param && typeof param.then === 'function' ? param.then : null
         if (then) {
-            const enqueue = typeof queueMicrotask === 'function' ? queueMicrotask : (cb) => Promise.resolve().then(cb)
-            enqueue(() => {
-                try { then.call(param, resolve, reject) } catch (e) { reject(e) }
+            queueMicrotask(() => {
+                try {
+                    then.call(param, resolve, reject)
+                } catch (e) {
+                    reject(e)
+                }
             })
         } else {
             resolve(param)
