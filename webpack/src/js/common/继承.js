@@ -1,10 +1,25 @@
 // https://segmentfault.com/a/1190000015727237
 
+/*
+1. 问题：JavaScript 实现继承的核心原理是什么？
+回答：JS 继承的核心是原型链继承，通过修改对象的__proto__指向，或重写构造函数的prototype，让子类构造函数的原型对象指向父类的实例 / 原型，从而使子类实例能通过原型链访问父类的属性和方法，实现属性与方法的复用。
+2. 问题：常见的 JS 继承方式有哪些？各有什么优缺点？
+回答：按演进顺序整理，覆盖面试常考 5 种方式：
+原型链继承/构造函数继承/组合继承/寄生组合继承/ES6 中的 class 继承
+3. 问题：为什么说 ES6 的class是语法糖？
+回答：ES6 的class只是原型链继承的语法简化，底层核心仍是原型和原型链，并非 Java/C++ 那种基于类的继承：
+class本质是构造函数的语法封装，class Person {}等价于function Person(){}；
+class中的方法会被定义在prototype上，静态方法定义在构造函数自身；
+extends底层通过Object.create实现原型链关联，super对应父类构造函数的调用，完全符合寄生组合继承的逻辑。
+*/
+
 /**
  * 继承图片中上半部分，不采用Object.create的继承方式
  * 
  **/
-// 1. 原型链继承  问题1: 不能传递参数给父元素，初始化父元素；问题2: 所有实例共享继承的属性
+// 1. 原型链继承  
+// 问题1.每个实例对引用类型的属性的修改也会被其他实例共享，这不是我们想看到的
+// 问题2.创建child的时候无法像构造函数穿参，child实例无法初始化父类属性
 function Parent() {
     this.parent = [1, 2, 3]
 }
@@ -16,7 +31,7 @@ function Child(child) {
 }
 
 Child.prototype = new Parent()
-Child.prototype.constructor = Child
+Child.prototype.constructor = Child // 为什么要这样写？因为我们重写了Child的prototype，所以要手动指回Child构造函数
 
 {
     let v1 = new Child([4, 5, 6])

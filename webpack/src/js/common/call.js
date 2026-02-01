@@ -78,15 +78,21 @@ export function demoMyApply() {
  * @returns {Function} 绑定后的函数
  */
 Function.prototype.myBind = function (context, ...args) {
+  // 仅函数可绑定，非函数抛错
   if (typeof this !== 'function') {
     throw new TypeError('myBind target is not a function')
   }
-  const target = this
+  const target = this // 保存原函数引用
+  // 返回绑定后的函数（可作为普通函数或构造函数使用）
   function boundFn(...innerArgs) {
+    // 构造调用判断：new boundFn(...) 时，this 应为新实例对象
     const isNewCall = this instanceof boundFn
+    // 普通调用用绑定的 context；构造调用使用当前 this（新实例）
     const thisArg = isNewCall ? this : context
+    // 参数拼接：预置参数在前，调用时参数在后
     return target.apply(thisArg, [...args, ...innerArgs])
   }
+  // 返回绑定函数
   return boundFn
 };
 

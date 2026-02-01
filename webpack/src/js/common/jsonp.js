@@ -150,12 +150,5 @@ function windowNameTransport(url, timeoutMs = 8000) {
 
 
 //请求数据
-jsonp('http://photo.sina.cn/aj/index', {
-    page: 1,
-    cate: 'recommend',
-}, 'jsoncallback').then(data => {
-    console.log(data)
-})
-
-
+c
 
