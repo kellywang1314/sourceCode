@@ -45,11 +45,10 @@ export class WorkerHelper {
   static async query<T = any>(type: string, params: any): Promise<T> {
     this.initWorker();
 
-    const url = `/api/query/${type}`; // demo 简化：固定前缀 + 类型
+    const url = `/api/query/${type}`;
     const id = String(params?.id ?? '');
-    const controller = new AbortController();
 
-    // 新查询前取消旧请求（按组件 id）
+    const controller = new AbortController();
     WorkerHelper.requestMap.get(id)?.abort();
     WorkerHelper.requestMap.set(id, controller);
 

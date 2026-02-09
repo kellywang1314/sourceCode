@@ -1,6 +1,6 @@
-import React, { useMemo, useRef } from 'react';
-import { useIntersectionObserver } from '../hooks/useIntersectionObserver';
+import { useMemo } from 'react';
 import { useVisibleQuery } from '../hooks/useVisibleQuery';
+import { WorkerHelper } from '../web-workder/workerHelper';
 
 type QueryParams = {
   timeRange: { start: string; end: string };
@@ -15,24 +15,25 @@ type QueryParams = {
  */
 export function ChartWidget({
   queryParams,
-  fetchChartData,
+  isVisible,
 }: {
   queryParams: QueryParams;
-  fetchChartData: (params: QueryParams, signal: AbortSignal) => Promise<any>;
+  isVisible: boolean;
 }) {
-  const containerRef = useRef<HTMLDivElement | null>(null);
-  const isVisible = useIntersectionObserver(containerRef, { threshold: [0, 0.5, 1], rootMargin: '50px 0px'  });
+  // isVisible 由父组件传入，用于按需触发查询与取消
 
   const deps = useMemo(() => queryParams, [queryParams]);
 
+  const chartType = useMemo(() => (queryParams as any)?.config?.type ?? 'line', [queryParams]);
   const { data, loading, error, refresh } = useVisibleQuery(
     isVisible,
     deps,
-    (signal) => fetchChartData(queryParams, signal)
+    () => WorkerHelper.query(chartType, queryParams),
+    String((queryParams as any)?.id ?? '')
   );
 
   return (
-    <div ref={containerRef} style={{ height: 300 }}>
+    <div style={{ height: 300 }}>
       {loading && <div>加载中...</div>}
       {error && <div onClick={refresh}>查询失败，点击重试</div>}
       {data && <div>这里渲染图表，数据点数：{data?.length ?? 0}</div>}

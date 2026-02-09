@@ -15,10 +15,8 @@ import { ChartWidget } from './ChartWidget';
  */
 function DashboardItem({
     item,
-    fetchChartData,
 }: {
     item: { id: string; queryParams: any };
-    fetchChartData: (params: any, signal: AbortSignal) => Promise<any>;
 }) {
     const ref = useRef<HTMLDivElement>(null);
     const isVisible = useIntersectionObserver(ref, { threshold: [0, 0.5, 1], rootMargin: '50px 0px' });
@@ -31,7 +29,7 @@ function DashboardItem({
     return (
         <div ref={ref} style={{ minHeight: 300 }}>
             {mounted && (
-               <ChartWidget queryParams={item.queryParams} fetchChartData={fetchChartData} />
+               <ChartWidget queryParams={item.queryParams} isVisible={isVisible} />
             )}
         </div>
     );
@@ -44,15 +42,13 @@ function DashboardItem({
  */
 export function DashboardGrid({
     items,
-    fetchChartData,
 }: {
     items: Array<{ id: string; queryParams: any }>;
-    fetchChartData: (params: any, signal: AbortSignal) => Promise<any>;
 }) {
     return (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16 }}>
             {items.map(item => (
-                <DashboardItem key={item.id} item={item} fetchChartData={fetchChartData} />
+                <DashboardItem key={item.id} item={item} />
             ))}
         </div>
     );
