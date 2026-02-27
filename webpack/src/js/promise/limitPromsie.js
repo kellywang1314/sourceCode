@@ -46,15 +46,14 @@ const urls = [
 function limitPromise(urls, limit = 3) {
   return new Promise((resolve, reject) => {
     let count = 0
+    let done = 0
     const lock = []
     const l = urls.length
     const result = new Array(l)
-    let done = 0
 
     // 阻塞：超过并发上限时挂起，等待 next 释放
     function block() {
-      let _resolve
-      return new Promise((r) => { _resolve = r; lock.push(_resolve) })
+      return new Promise((r) => { lock.push(r) })
     }
 
     // 释放一个阻塞的任务
@@ -79,6 +78,8 @@ function limitPromise(urls, limit = 3) {
     for (let i = 0; i < l; i++) run(i)
   })
 }
+
+limitPromise(urls, 2).then(res => console.log(res))
 
 
 /**

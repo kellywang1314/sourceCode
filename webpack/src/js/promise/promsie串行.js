@@ -60,7 +60,11 @@ async function serialAsyncFor(tasks) {
 function serialReduce(tasks) {
     const results = []
     return tasks
-        .reduce((p, fn) => p.then(() => fn().then(v => { results.push(v) })), Promise.resolve())
+        .reduce((p, fn) =>
+            p.then(
+                () => fn().then(v => { results.push(v) })
+            ), Promise.resolve()
+        )
         .then(() => results)
 }
 

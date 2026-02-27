@@ -18,14 +18,15 @@ class __Lazyman {
     }
 
     sleep(time) {
-        this._sleep(0, time)
+        this._sleep(false, time)
         return this
     }
 
     sleepFirst(time) {
-        this._sleep(1, time)
+        this._sleep(true, time)
         return this
     }
+
     _sleep(isfirst, time) {
         const task = () => {
             setTimeout(() => {

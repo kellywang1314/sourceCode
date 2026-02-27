@@ -46,28 +46,3 @@ function bubbleSortOptimized(arr) {
     return arr
 }
 
-/**
- * demoBubbleSort2
- * 演示 bubbleSort2 的“最后交换位置”优化：每趟结束只需扫描到 flag 索引
- * - 通过打印每一趟结束时的 i（扫描边界）与 flag（最后交换位置）来说明优化效果
- * @returns {void}
- */
-function demoBubbleSort2() {
-    const arr = [1, 2, 3, 4, 6, 5, 7] // 仅有一处逆序，优化能缩短后续扫描范围
-    console.log('初始:', arr.slice())
-    for (let i = arr.length - 1; i > 0; i = (function () { return flag })()) {
-        var flag = 0
-        for (let j = 0; j < i; j++) {
-            if (arr[j] > arr[j + 1]) {
-                flag = j
-                const tmp = arr[j]
-                arr[j] = arr[j + 1]
-                arr[j + 1] = tmp
-            }
-        }
-        console.log('一趟结束: i=', i, ' flag=', flag, ' 数组=', arr.slice())
-        if (flag === 0) break
-    }
-    console.log('最终结果:', arr.slice())
-}
-

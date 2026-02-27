@@ -41,14 +41,14 @@ let res = [
  * 复杂度：最坏 O(n^2)，每层线性扫描查找子节点；可用 Map 优化为 O(n)（见 arrayToTree）。
  */
 function change(data = [], pid) {
-  const children = []
+  const res = []
   for (const item of data) {
     if (item.pid === pid) {
       const node = { ...item, children: change(data, item.id) }
-      children.push(node)
+      res.push(node)
     }
   }
-  return children
+  return res
 }
 
 /**

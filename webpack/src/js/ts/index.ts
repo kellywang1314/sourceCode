@@ -1,6 +1,5 @@
 
-
-                                    // interface和type
+// interface和type
 // 1. interface 只能定义对象类型, 而 type 声明可以声明任何类型，包括基础类型、联合类型或交叉类型。
 // 2. 接口可以 extends、implements,从而扩展多个接口或类。类型没有扩展功能，只能交叉合并
 
@@ -23,13 +22,13 @@ function area(s: Shape) {
     if (s.kind === "square") {
         console.log(s.size * s.size)
     }
-    else { 
+    else {
         console.log(s.width * s.height);
     }
 }
 // kind = 'rectangle' 只能跟width, height
-area({kind:"rectangle",width:12,height:13})
-area({kind:"square",size:12 })
+area({ kind: "rectangle", width: 12, height: 13 })
+area({ kind: "square", size: 12 })
 
 
 
@@ -48,13 +47,13 @@ function getValValue<T>(val: T): T {
 }
 
 // 泛型约束
-type Params=  string | number | any[];
+type Params = string | number | any[];
 function getValValue2<T extends Params>(val: T): T {
     return val;
 }
 
 // 多个参数是范型
-function getName<T,U> (name: T, id: U): [T, U] {
+function getName<T, U>(name: T, id: U): [T, U] {
     return [name, id]
 }
 getName('peen', 1);
@@ -77,18 +76,18 @@ interface Person {
     name: string,
     age: number,
     sex: string,
-  }
-  let person: Pick<Person, 'name' | 'age'> = {
+}
+let person: Pick<Person, 'name' | 'age'> = {
     name: '小王',
     age: 21,
-  }
+}
 
-  // 4. Record<K,T>，将 K 中所有的属性的值转化为 T 类型
-  let person1: Record<'name' | 'age', string> = {
+// 4. Record<K,T>，将 K 中所有的属性的值转化为 T 类型
+let person1: Record<'name' | 'age', string> = {
     name: '小王',
     age: '12',
-  }
-  
+}
+
 
 
 
