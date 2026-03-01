@@ -16,7 +16,6 @@
 window.scroll获取scrollTop数据
 拖拽一个元素时，要随时拿到该元素被拖拽的位置
 */
-
 /**
  * throttle
  * 函数功能：节流，支持立即执行（leading）。

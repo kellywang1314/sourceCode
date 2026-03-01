@@ -54,22 +54,6 @@ export function myInstanceof(obj, ctor) {
     }
 }
 
-function myInstanceof2(obj, Constructor) {
-    // 基础类型直接返回false（instanceof不检测基础类型）
-    if (typeof obj !== 'object' || obj === null) return false;
-    // 获取对象的原型
-    let proto = Object.getPrototypeOf(obj);
-    // 沿原型链遍历
-    while (true) {
-        // 遍历到原型链终点，返回false
-        if (proto === null) return false;
-        // 找到构造函数的prototype，返回true
-        if (proto === Constructor.prototype) return true;
-        // 继续向上找原型
-        proto = Object.getPrototypeOf(proto);
-    }
-}
-
 /**
  * objectCreate
  * 简化版 Object.create 的实现：基于指定原型创建新对象
@@ -99,7 +83,6 @@ export function myNew(ctor, ...args) {
 
 function myNew2(fn) {
     let obj = {}
-    let fn = [...arguments].slice(0, 1)
     let args = [...arguments].slice(1)
     obj.__proto__ = fn.prototype
     let result = fn.apply(obj, args)

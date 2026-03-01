@@ -1,10 +1,3 @@
-
-//call源码实现:主要是把调用call的函数赋值给thisObj对象
-let obj = {
-  a: [1, 2, 3]
-}
-
-// fn.call(obj,1,2,3)
 Function.prototype.myCall = function (context, ...args) {
   if (typeof this !== 'function') {
     throw this + ' is not a function';
