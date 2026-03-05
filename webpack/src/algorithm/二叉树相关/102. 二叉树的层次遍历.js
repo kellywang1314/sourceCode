@@ -46,7 +46,7 @@
  * @param {TreeNode} root 根节点
  * @returns {number[][]} 每一层的节点值列表
  */
-var levelOrder = function(root) {
+var levelOrder = function (root) {
     // 空树直接返回空结果
     if (root === null) return [];
 
@@ -71,7 +71,7 @@ var levelOrder = function(root) {
         if (head.right !== null) {
             level.push(head.right)
         }
-        
+
         // 当前层已处理完：队列为空；且下一层已有节点
         if (!stack.length && level.length) {
             // 收集下一层所有节点的值，追加到结果集中
@@ -86,6 +86,22 @@ var levelOrder = function(root) {
     return res;
 };
 
+function levelOrder1(root) {
+    if (!root) return [];
+    const stack = [root], res = [];
+    while (stack.length) {
+        const len = stack.length, level = [];
+        for (let i = 0; i < len; i++) {
+            const node = stack.shift();
+            level.push(node.val);
+            if (node.left) stack.push(node.left);
+            if (node.right) stack.push(node.right);
+        }
+        res.push(level);
+    }
+    return res;
+}
+
 
 
 /**
@@ -98,12 +114,12 @@ var levelOrder = function(root) {
  */
 function bfs(node) {
     let result = []
-    let queue = [node]
-    while (queue.length) {
-        const cur = queue.shift()
+    let stackueue = [node]
+    while (stackueue.length) {
+        const cur = stackueue.shift()
         result.push(cur.value)
-        if (cur.left) queue.push(cur.left)
-        if (cur.right) queue.push(cur.right)
+        if (cur.left) stackueue.push(cur.left)
+        if (cur.right) stackueue.push(cur.right)
     }
     return result
 }

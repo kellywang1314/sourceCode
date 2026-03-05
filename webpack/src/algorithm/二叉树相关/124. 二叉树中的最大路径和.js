@@ -38,50 +38,24 @@
  * @param {TreeNode} root
  * @return {number}
  */
-var maxPathSum = function(root) {
-    let max = Number.NEGATIVE_INFINITY;
-    function path(root) {
-        if (root === null)  return 0;
-
-        let left = Math.max(path(root.left), 0);
-        let right = Math.max(path(root.right), 0);
-
-        max = Math.max(max, left + right + root.val);
-        return root.val + Math.max(left, right);
+/**
+ * maxPathSum
+ * 功能：返回二叉树的最大路径和（路径可从任意节点到任意节点，需沿父子相连的一条链）
+ * 思路：后序 DFS 计算“向上可延伸的最大贡献”，丢弃负贡献；
+ *       以当前节点作为“拐点”尝试更新全局最佳：node.val + max(0,left) + max(0,right)
+ * 复杂度：时间 O(n)，空间 O(h)（递归栈，h 为树高）
+ * @param {TreeNode|null} root 根节点
+ * @returns {number} 最大路径和
+ */
+var maxPathSum = function (root) {
+    let best = -Infinity;
+    function dfs(node) {
+        if (node == null) return 0;
+        const leftGain = Math.max(0, dfs(node.left));
+        const rightGain = Math.max(0, dfs(node.right));
+        best = Math.max(best, node.val + leftGain + rightGain);
+        return node.val + Math.max(leftGain, rightGain);
     }
-
-    function maxSum(root) {
-        if (root === null) return 0;
-
-        path(root);
-        return max;
-    }
-
-    maxSum(root);
-
-    return max;
+    dfs(root);
+    return best;
 };
-
-var root = {
-    val: -10,
-    left: {
-        val: 9,
-        left: null,
-        right: null
-    },
-    right: {
-        val: 20,
-        left: {
-            val: 15,
-            left: null,
-            right: null
-        },
-        right: {
-            val: 7,
-            left: null,
-            right: null
-        }
-    }
-};
-
-console.log(maxPathSum(root));

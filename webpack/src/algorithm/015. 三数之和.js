@@ -13,66 +13,71 @@
  * ]
  *
  */
+// 排序：先对数组进行排序，这是去重和双指针法的基础。
+// 遍历 + 双指针：固定一个数 nums[i]，然后用左指针 left = i+1、右指针 right = nums.length-1 寻找另外两个数，使三者之和为 0。
+// 去重：在遍历和移动指针的过程中，跳过重复的元素，避免生成重复的三元组。
 
-/**整体思路是先固定一个数，然后转化为2数之和的问题求解
- * 为了方便去重，所以数组先排序，再开始固定
- * 固定一个数后，用头尾指针遍历排序后的数组
- * 和比target大，尾指针移动，比target小则尾指针移动
- * 容易忽略点在于，固定一个数之后头尾指针移动过程中的重复问题
- * 所以target每次变换的时候和上一次比较是否重复，重复则跳过
- * 头尾指针移动的时候也是和上一次的值比较是否重复，重复则跳过
- *
- * @param {number[]} nums
- * @return {number[][]}
+/**
+ * 三数之和：找出数组中所有和为0的不重复三元组
+ * @param {number[]} nums 输入数组
+ * @returns {number[][]} 符合条件的三元组数组
  */
-var threeSum = function (nums) {
-  let n = nums.length;
-  if (n < 3) return [];
-  let result = [];
+function threeSum(nums) {
+  // 结果数组
+  const result = [];
+  // 处理边界情况：数组长度小于3直接返回空
+  if (nums.length < 3) return result;
+
+  // 1. 排序（关键：方便双指针移动和去重）
   nums.sort((a, b) => a - b);
 
-  let index = 0;
-  while (index < n - 2) {
-    //  结果去重
-    //  什么情况会重复？
-    //  即target相等的时候，所以当本次target和上次target相等就跳过本次
-    if (index > 0 && nums[index] === nums[index - 1]) {
-      index++;
-      continue;
-    }
-    let target = -nums[index];
+  // 2. 遍历固定第一个数
+  for (let i = 0; i < nums.length; i++) {
+    // 优化：如果第一个数大于0，后面的数都≥它，和不可能为0，直接退出
+    if (nums[i] > 0) break;
 
-    let start = index + 1;
-    let end = n - 1;
-    while (start < end) {
+    // 去重：跳过和前一个数相同的元素（避免重复三元组）
+    if (i > 0 && nums[i] === nums[i - 1]) continue;
 
-      let sum = nums[start] + nums[end];
-      if (sum > target) {
-        end--;
-      } else if (sum < target) {
-        start++;
+    // 定义双指针
+    let left = i + 1;
+    let right = nums.length - 1;
+
+    // 3. 移动双指针找另外两个数
+    while (left < right) {
+      const sum = nums[i] + nums[left] + nums[right];
+
+      if (sum === 0) {
+        // 找到符合条件的三元组，加入结果
+        result.push([nums[i], nums[left], nums[right]]);
+
+        // 去重：跳过左侧重复元素
+        while (left < right && nums[left] === nums[left + 1]) left++;
+        // 去重：跳过右侧重复元素
+        while (left < right && nums[right] === nums[right - 1]) right--;
+
+        // 移动指针继续寻找
+        left++;
+        right--;
+      } else if (sum < 0) {
+        // 和太小，左指针右移增大数值
+        left++;
       } else {
-        //  当start和end移动的时候如果和上一次的数字相同就跳过，避免重复
-        if (start - 1 > index && nums[start] === nums[start - 1]) {
-          start++;
-          continue;
-        }
-        if (end + 1 < n &&  nums[end] === nums[end + 1]) {
-          end--;
-          continue;
-        }
-        result.push([nums[index], nums[start], nums[end]]);
-        start++;
+        // 和太大，右指针左移减小数值
+        right--;
       }
-
     }
-
-    index++;
   }
-  return result;
-};
 
-// var arr = [-1, 0, 1, 2, -1, -4, 1, 1, 2];
-// var arr = [0, 0, 0, 0];
-var arr = [-1, 0, 1, 2, -1, -4];
-console.log(threeSum(arr))
+  return result;
+}
+
+// 测试用例
+const testCase1 = [-1, 0, 1, 2, -1, -4];
+console.log(threeSum(testCase1)); // 输出：[[-1,-1,2],[-1,0,1]]
+
+const testCase2 = [0, 0, 0];
+console.log(threeSum(testCase2)); // 输出：[[0,0,0]]
+
+const testCase3 = [1, 2, -2, -1];
+console.log(threeSum(testCase3)); // 输出：[]
