@@ -51,25 +51,4 @@ const ajaxMise = (url = '', method = 'get', data = {}, async = true, headers = {
     })
 }
 
-// 基于promise实现请求图片
-const getImage = () => {
-    new Promise((resolve, reject) => {
-        const img = document.createElement('img')
-        img.onload = () => {
-            resolve(img)
-        }
-        img.onerror = () => {
-            reject('加载错误')
-        }
-        img.src = src
-    })
-}
-
-
-// H5 API fetch
-/* 
-1. 调用方式不同
-2. fetch是基于promise设计的
-*/
-
 

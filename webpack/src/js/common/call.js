@@ -78,7 +78,7 @@ Function.prototype.myBind = function (context, ...args) {
   const target = this // 保存原函数引用
   // 返回绑定后的函数（可作为普通函数或构造函数使用）
   function boundFn(...innerArgs) {
-    // 构造调用判断：new boundFn(...) 时，this 应为新实例对象
+    //用来判断调用boundFn是普通调用还是构造调用
     const isNewCall = this instanceof boundFn
     // 普通调用用绑定的 context；构造调用使用当前 this（新实例）
     const thisArg = isNewCall ? this : context
@@ -103,8 +103,12 @@ export function demoMyBind() {
   const res = bound('Q')
   console.log('demoMyBind:', res)
 
-  function User(prefix, name) { this.prefix = prefix; this.name = name }
-  User.prototype.say = function () { return this.prefix + this.name }
+  function User(prefix, name) { 
+    this.prefix = prefix; this.name = name 
+  }
+  User.prototype.say = function () { 
+    return this.prefix + this.name 
+  }
   const BoundUser = User.myBind({ any: true }, 'B-')
   const u = new BoundUser('Jack')
   console.log('demoMyBind:new:', u.say())

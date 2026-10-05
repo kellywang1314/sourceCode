@@ -91,3 +91,84 @@ function debounce(fn, wait, immediate = true) {
 // }
 
 // window.addEventListener('resize', debounce(() => f(1), 1000, true))
+
+/**
+ * throttleWithOptions
+ * 函数功能：通过 leading 和 trailing 配置节流函数的首次与末次执行行为。
+ * @param {Function} fn 目标函数
+ * @param {number} wait 间隔毫秒
+ * @param {{ leading?: boolean, trailing?: boolean }} [options={}] 执行时机配置
+ * @returns {Function} 带 cancel 方法的节流函数
+ */
+export function throttleWithOptions(fn, wait, options = {}) {
+    const { leading = true, trailing = true } = options
+    let timer = null
+    let previousTime = 0
+    let lastArgs = null
+    let lastThis = null
+    let result
+
+    /**
+     * 在等待窗口结束时执行最后一次调用。
+     * @returns {void}
+     */
+    function invokeTrailing() {
+        previousTime = leading ? Date.now() : 0
+        timer = null
+        result = fn.apply(lastThis, lastArgs)
+        lastArgs = null
+        lastThis = null
+    }
+
+    /**
+     * 根据剩余等待时间决定立即执行或安排 trailing。
+     * @param {...*} args 调用参数
+     * @returns {*} 最近一次目标函数的返回值
+     */
+    function throttled(...args) {
+        if (!leading && !trailing) {
+            return result
+        }
+
+        const currentTime = Date.now()
+        if (!previousTime && !leading) {
+            previousTime = currentTime
+        }
+
+        const remainingTime = wait - (currentTime - previousTime)
+        lastArgs = args
+        lastThis = this
+
+        if (remainingTime <= 0 || remainingTime > wait) {
+            if (timer) {
+                clearTimeout(timer)
+                timer = null
+            }
+
+            previousTime = currentTime
+            result = fn.apply(lastThis, lastArgs)
+            lastArgs = null
+            lastThis = null
+        } else if (!timer && trailing) {
+            timer = setTimeout(invokeTrailing, remainingTime)
+        }
+
+        return result
+    }
+
+    /**
+     * 取消尚未执行的 trailing，并重置节流状态。
+     * @returns {void}
+     */
+    throttled.cancel = function cancelThrottle() {
+        if (timer) {
+            clearTimeout(timer)
+        }
+        timer = null
+        previousTime = 0
+        lastArgs = null
+        lastThis = null
+    }
+
+    return throttled
+}

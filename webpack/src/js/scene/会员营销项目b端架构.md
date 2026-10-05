@@ -13,7 +13,6 @@ https://bytedance.larkoffice.com/docx/YJkFdkcAKoDBoRxnhXdcTUwpncg
 4. 表单联动
 直接看formily的表单联动是怎么做的就可以
 
-
 5. 表单校验
  - 提供一个基础bricks-validator，提供一些基础的校验的函数
  - 业务仓库通过@formily/validator提供的ValidatorFunction自定义业务校验器，比如：ValidatorFunction<number> = (value: number, rule: IValidatorRules) => {}, 其中的rule是配置中通过x-validator传递的一些动态/静态参数

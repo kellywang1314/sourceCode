@@ -59,13 +59,21 @@ async function serialAsyncFor(tasks) {
  */
 function serialReduce(tasks) {
     const results = []
-    return tasks
-        .reduce((p, fn) =>
-            p.then(
-                () => fn().then(v => { results.push(v) })
-            ), Promise.resolve()
-        )
-        .then(() => results)
+
+    const serialPromise = tasks.reduce(
+        (previousPromise, task) => {
+            // 等待前面所有任务完成后，再执行当前任务
+            return previousPromise.then(() => {
+                return task().then(result => {
+                    results.push(result)
+                })
+            })
+        },
+        // 作为 Promise 链的起点，让第一个任务可以立即执行
+        Promise.resolve()
+    )
+
+    return serialPromise.then(() => results)
 }
 
 /**
@@ -98,8 +106,5 @@ function serialRecursion(tasks) {
 function serialWithValue(tasks, initial) {
     return tasks.reduce((p, fn) => p.then(fn), Promise.resolve(initial))
 }
-
-
-
 
 

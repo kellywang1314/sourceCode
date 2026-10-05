@@ -37,7 +37,7 @@ new Promise(function (resolve, reject) {
   }, 0);
 });
 
-// start  childern4  catch: error  then3:success2  children2  children3 children5 children7 children6
+// start  childern4  catch: error  then3: undefined  children2  children3 children5 children7 children6
 
 const a = new Promise((resolve, reject) => {
   console.log("promise1");

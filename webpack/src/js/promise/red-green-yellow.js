@@ -16,20 +16,20 @@ const light = function (timer, cb) {
       }, timer)
     })
   }
-  const step = function () {
-    Promise.resolve().then(() => {
-      return light(3000, red)
-    }).then(() => {
-      return light(2000, green)
-    }).then(() => {
-      return light(1000, yellow)
-    // 怎么保证循环
-    }).then(() => {
-      return step()
-    })
-  }
+const step = function () {
+  Promise.resolve().then(() => {
+    return light(3000, red)
+  }).then(() => {
+    return light(2000, green)
+  }).then(() => {
+    return light(1000, yellow)
+  // 怎么保证循环
+  }).then(() => {
+    return step()
+  })
+}
   
-  step();
+step();
 
 
 

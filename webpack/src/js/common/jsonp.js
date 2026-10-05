@@ -31,7 +31,9 @@ function jsonp(url, data = {}, callback = 'callback') {
             } finally {
                 //移除script元素
                 script.parentNode.removeChild(script)
-                try { delete window[callback] } catch (e) { }
+                try { 
+                    delete window[callback] 
+                } catch (e) { }
             }
         }
     })

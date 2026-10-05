@@ -18,22 +18,46 @@ function copy(obj) {
 // 还会丢失原型上的属性
 /**
  * deepClone
- * 递归深拷贝对象/数组，处理循环引用，并支持常见内置类型（Date/RegExp）。
+ * 递归深拷贝对象/数组，处理循环引用，并支持 Date、RegExp、Map 和 Set。
  * @param {any} source 源数据
  * @param {WeakMap<any, any>} cache 引用缓存
  * @returns {any} 拷贝结果
  */
-function deepClone(source, cache = new WeakMap()) {
+export function deepClone(source, cache = new WeakMap()) {
     if (source === null || typeof source !== 'object') return source
+    if (cache.has(source)) return cache.get(source)
     // Date
-    if (source instanceof Date) return new Date(source.getTime())
+    if (source instanceof Date) {
+        const clonedDate = new Date(source.getTime())
+        cache.set(source, clonedDate)
+        return clonedDate
+    }
     // RegExp（保留正则表达式的源与标志，并复制 lastIndex）
     if (source instanceof RegExp) {
-        const re = new RegExp(source.source, source.flags)
-        re.lastIndex = source.lastIndex
-        return re
+        // 例如`/ab+/gi`,- `source.source` ：正则内容，例如`"ab+"`; `source.flags` ：正则修饰符，例如`"gi"`
+        const clonedRegExp = new RegExp(source.source, source.flags)
+        clonedRegExp.lastIndex = source.lastIndex
+        cache.set(source, clonedRegExp)
+        return clonedRegExp
     }
-    if (cache.has(source)) return cache.get(source)
+    // Map：键和值都需要递归拷贝；先缓存空 Map，避免循环引用导致无限递归
+    if (source instanceof Map) {
+        const clonedMap = new Map()
+        cache.set(source, clonedMap)
+        source.forEach((value, key) => {
+            clonedMap.set(deepClone(key, cache), deepClone(value, cache))
+        })
+        return clonedMap
+    }
+    // Set：递归拷贝每个元素；先缓存空 Set，避免循环引用导致无限递归
+    if (source instanceof Set) {
+        const clonedSet = new Set()
+        cache.set(source, clonedSet)
+        source.forEach(value => {
+            clonedSet.add(deepClone(value, cache))
+        })
+        return clonedSet
+    }
     const target = Array.isArray(source) ? [] : {}
     cache.set(source, target)
     for (let i in source) {
@@ -44,8 +68,8 @@ function deepClone(source, cache = new WeakMap()) {
 }
 
 // 循环引用
-const a = {};
-a.self = a;
+const circularObj = {};
+circularObj.self = circularObj;
 
 
 // 测试用例
@@ -88,4 +112,3 @@ const obj = {
     b: 3
 }
 getDeepObject(obj) // ["a.a1", "a.a2.a21.a211", "b"] 
-

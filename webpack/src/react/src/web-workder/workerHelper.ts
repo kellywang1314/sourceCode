@@ -17,6 +17,9 @@ export class WorkerHelper {
   static initWorker() {
     if (this.worker) return;
     this.worker = new Worker(new URL('./query.worker.ts', import.meta.url), { type: 'module' });
+    // 主线程消息通道：
+    // - Worker 以 { id, data, error } 约定回传
+    // - 根据 id 找回对应 Promise 的 resolve/reject，确保“一次响应一次清理”，避免回调泄漏
     this.worker.addEventListener('message', e => {
       const { id, data, error } = e.data || {};
       const cb = this.callbacks.get(id);
@@ -69,7 +72,7 @@ export class WorkerHelper {
   }
 
   /**
-   * 在 Worker 中执行格式化任务
+   * 在子线程Worker中执行格式化任务
    * @param rawData 原始返回数据
    * @param type 图表类型
    * @param params 查询参数（可用于辅助格式化）

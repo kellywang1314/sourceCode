@@ -39,19 +39,24 @@ b.__proto__.__proto__ === Object.prototype // true
 
 /**
  * myInstanceof
- * 使用原型链判断 obj 是否为构造函数 ctor 的实例（polyfill instanceof）
- * @param {object} obj 待检测对象
+ * 面试简化版 instanceof：沿对象的原型链查找构造函数的 prototype
+ * @param {*} obj 待检测值
  * @param {Function} ctor 构造函数
  * @returns {boolean} 是否为实例
  */
 // 验证：myInstanceof(b, a) 为 true，说明 b 是 a 的实例
 export function myInstanceof(obj, ctor) {
-    if (obj == null || typeof ctor !== 'function') return false
-    while (true) {
-        if (obj === null) return false
-        if (obj.__proto__ === ctor.prototype) return true
-        obj = obj.__proto__
+    const objType = typeof obj
+    const isObject = obj !== null && (objType === 'object' || objType === 'function')
+    if (!isObject || typeof ctor !== 'function') return false
+
+    let currentPrototype = Object.getPrototypeOf(obj)
+    while (currentPrototype !== null) {
+        if (currentPrototype === ctor.prototype) return true
+        currentPrototype = Object.getPrototypeOf(currentPrototype)
     }
+
+    return false
 }
 
 /**
@@ -78,15 +83,6 @@ export function myNew(ctor, ...args) {
     const obj = Object.create(ctor.prototype)
     const res = ctor.apply(obj, args)
     return res !== null && (typeof res === 'object' || typeof res === 'function') ? res : obj
-}
-
-
-function myNew2(fn) {
-    let obj = {}
-    let args = [...arguments].slice(1)
-    obj.__proto__ = fn.prototype
-    let result = fn.apply(obj, args)
-    return typeof result === 'object' ? result : obj
 }
 
 // 2. 描述下new做了什么
@@ -155,5 +151,3 @@ export function demoPrototypeQuestions() {
     console.log('ownKeysVsIn:', ownKeysVsIn(p))
     console.log('getPrototypeChain length:', getPrototypeChain(p).length)
 }
-
-

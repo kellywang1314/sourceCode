@@ -53,9 +53,9 @@ function Parent(parent) {
 Parent.prototype.getP = function () {
     console.log(this.parent)
 }
-function Child(Parentvalue, Child) {
-    Parent.call(this, Parentvalue)
-    this.Child = Child
+function Child(ParentValue, ChildValue) {
+    Parent.call(this, ParentValue)
+    this.Child = ChildValue
 }
 
 {

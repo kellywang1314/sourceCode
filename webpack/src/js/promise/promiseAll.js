@@ -11,11 +11,11 @@
  * @returns {Promise<any[]>} 结果数组（与输入顺序一致）
  */
 function PromiseAll(iterable){
-    const list = Array.from(iterable)
-    const len = list.length
+    const list = Array.from(iterable);
+    const len = list.length;
+    const results = new Array(len)
     return new Promise((resolve, reject) => {
         if (len === 0) return resolve([])
-        const results = new Array(len)
         let count = 0
         for (let idx = 0; idx < len; idx++) {
             Promise.resolve(list[idx])
